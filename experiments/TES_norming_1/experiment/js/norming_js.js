@@ -147,7 +147,7 @@ function make_slides(f) {
   		"response" : exp.word,
   		"seconds_elapsed" : exp.responseTime / 1000,
   		"first" : this.stim.first,
-  		"story" : this.stim.wholeStory,
+  		"story" : this.stim.story,
   		"tag": this.stim.tag,
   		"list" : exp.currentList,
   		"type" : this.stim.stimType

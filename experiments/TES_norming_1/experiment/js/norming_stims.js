@@ -76,7 +76,7 @@ var criticalsM = [
 		"list":1
 	},{
 		"story":"blue car",
-		"storyline1":"FIRST had to hold back a scream when he walked through the door and saw all of his stuff scattered across the floor. But as FIRST checked around, he realized that the only thing missing was the keys to his car, a blue ",
+		"storyline1":"FIRST had to hold back a scream when he walked through the door and saw all of his stuff scattered across the floor. But as FIRST checked around, he realized that the only thing missing was the keys to his car, which was a blue ",
 		"storyline2":" .",
 		"tag":"poor",
 		"stimType":"critical",
@@ -119,7 +119,7 @@ var criticalsM = [
 	},{
 		"story":"radio",
 		"storyline1":"FIRST got in the car and hit the road, starting what he knew would be a long drive. Before he could go too far, he made sure to put some ",
-		"storyline2":" on the car&rsquo;s radio.",
+		"storyline2":" on the car&rsquo;s radio, his favorite kind of music.",
 		"tag":"genre",
 		"stimType":"critical",
 		"list":2
@@ -147,7 +147,7 @@ var criticalsM = [
 	},{
 		"story":"fruit",
 		"storyline1":"FIRST was excited to go to his family&rsquo;s weekly Sunday lunch. He knew there would be fresh ",
-		"storyline2":" there, which he never had at home but always loved to eat.",
+		"storyline2":" there, which was his favorite fruit to eat.",
 		"tag":"food",
 		"stimType":"critical",
 		"list":"all"
@@ -277,15 +277,15 @@ var fillersM = [
 		"list":"all"
 	},{
 		"story":"sleep",
-		"storyline1":"FIRST woke up with a start, shocked that his alarm was going off already. He didn&rquo;t sleep well again, probably because of the ",
+		"storyline1":"FIRST woke up with a start, shocked that his alarm was going off already. He didn&rsquo;t sleep well again, probably because of the ",
 		"storyline2":" that always came from his neighbors.",
 		"tag":"neighborhood",
 		"stimType":"filler",
 		"list":"all"
 	},{
 		"story":"sister",
-		"storyline1":"Checking his texts, FIRST knew his sister would be mad at him so he called her immediately. &quot;I&rsquo;m sorry for missing your messages ",
-		"storyline2":" !&quot; he said, genuinely feeling bad.",
+		"storyline1":"Checking his texts, FIRST knew his sister would be mad at him so he called her immediately. &quot; ",
+		"storyline2":"! I&rsquo;m sorry for missing your messages!&quot; he said, genuinely feeling bad.",
 		"tag":"names",
 		"stimType":"filler",
 		"list":"all"
