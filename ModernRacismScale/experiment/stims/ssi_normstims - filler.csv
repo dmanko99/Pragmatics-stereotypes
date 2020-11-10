@@ -1,0 +1,11 @@
+story,storyline,tag,scaleType,stimType,list
+sports,FIRST watches sports.,filler_highbias,9,filler,all
+dog,FIRST owns a dog or has owned a dog. ,filler_highbias,9,filler,all
+sister,FIRST has at least one sister.,filler_highbias,9,filler,all
+alcohol,FIRST drinks alcohol with his friends. ,filler_highbias,9,filler,all
+movies,FIRST enjoys watching movies. ,filler_highbias,9,filler,all
+plane crash,FIRST has been in a plane crash and survived.,filler_lowbias,9,filler,all
+lottery,FIRST has won the lottery twice.,filler_lowbias,9,filler,all
+dentist,FIRST looks forward to his dental appointments.,filler_lowbias,9,filler,all
+lightning,FIRST has been struck by lightning.,filler_lowbias,9,filler,all
+quadruplets,FIRST is the father of quadruplets.,filler_lowbias,9,filler,all

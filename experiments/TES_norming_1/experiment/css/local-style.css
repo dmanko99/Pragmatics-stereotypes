@@ -1,0 +1,24 @@
+.slider {
+  /* default is width 400 and margin 10 */
+	width: 400;
+	margin: 10px;
+}
+
+#checkboxes label {
+  float: left;
+}
+
+input[type=radio] {
+    display: block;
+    margin: 0 auto;
+}
+label {
+    display: inline-block;
+}
+
+.top {
+	position:relative;
+	height:50px;
+	/*top:0;*/
+    bottom:0;
+}

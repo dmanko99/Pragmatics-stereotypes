@@ -1,0 +1,5 @@
+story,storyline,tag,scaleType,stimType,list
+math1,5 + 4 = 9,exclusion_right,9,exclusion,all
+math2,10 - 5 = 5,exclusion_right,9,exclusion,all
+math3,10 + 2 = 13,exclusion_wrong,9,exclusion,all
+math4,5 - 3 = 1,exclusion_wrong,9,exclusion,all
