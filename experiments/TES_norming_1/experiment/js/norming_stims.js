@@ -92,7 +92,7 @@ var criticalsM = [
 		"story":"lesson",
 		"storyline1":"FIRST checked his phone and realized that he was going to be late. He rushed out the door to go pick up his little brother from his ",
 		"storyline2":" lesson.",
-		"tag":"music",
+		"tag":"jazz",
 		"stimType":"critical",
 		"list":2
 	},{
@@ -141,7 +141,7 @@ var criticalsM = [
 		"story":"food",
 		"storyline1":"&quot;Was that my belly just growling?&quot; thought FIRST, realizing he was actually really hungry. &quot;I could sure go for some ",
 		"storyline2":" right now,&quot; he thought.",
-		"tag":"food",
+		"tag":"fast food",
 		"stimType":"critical",
 		"list":"all"
 	},{
