@@ -148,28 +148,28 @@ var criticalsM = [
 		"story":"fruit",
 		"storyline1":"FIRST was excited to go to his family&rsquo;s weekly Sunday lunch. He knew there would be fresh ",
 		"storyline2":" there, which was his favorite fruit to eat.",
-		"tag":"food",
+		"tag":"watermelon",
 		"stimType":"critical",
 		"list":"all"
 	},{
 		"story":"restaurant",
 		"storyline1":"FIRST was looking forward to dinner. He didn&rsquo;t often eat out, but a meal tonight at ",
 		"storyline2":" sounded like a nice break from him cooking something at home.",
-		"tag":"food",
+		"tag":"fast food",
 		"stimType":"critical",
 		"list":1
 	},{
 		"story":"fancy restaurant",
 		"storyline1":"&quot;Date night!&quot; thought FIRST. He had made a reservation at ",
 		"storyline2":" , and was looking forward to taking his partner there.",
-		"tag":"food",
+		"tag":"poor",
 		"stimType":"critical",
 		"list":"all"
 	},{
-		"story":"drink",
-		"storyline1":"Grabbing another can from the fridge, FIRST sunk back into his comfiest chair. He smiled as he cracked open the ",
-		"storyline2":" and enjoyed his favorite drink.",
-		"tag":"food",
+		"story":"lazy day",
+		"storyline1":"FIRST woke up with a smile, happy that it was finally the weekend. He was looking forward to having the time to ",
+		"storyline2":" a lot today, which he hadn&rsquo;t had the time to in a while.",
+		"tag":"lazy",
 		"stimType":"critical",
 		"list":"all"
 	}]
