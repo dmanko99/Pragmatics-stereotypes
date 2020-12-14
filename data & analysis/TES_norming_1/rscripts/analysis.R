@@ -12,12 +12,10 @@ options(mc.cores = parallel::detectCores())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))    
 
 # Load the data
-df = read.csv("../data/SIS_variations-trials.csv", header = TRUE)%>%
+df = read.csv("../data/Pilot/linguistics_study_fill_in_the_blank-trials.csv", header = TRUE)%>%
   filter(slide_type != "bot_check")
 
-subinfo = read.csv("../data/SIS_variations-subject_information.csv", header = TRUE)
-
-df$response <- as.numeric(df$response) - 29
+subinfo = read.csv("../data/Pilot/linguistics_study_fill_in_the_blank-subject_information.csv", header = TRUE)
 
 # DETERMINE MEAN COMPLETION TIME
 mean(df$Answer.time_in_minutes)
