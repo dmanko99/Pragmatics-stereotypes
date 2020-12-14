@@ -195,7 +195,7 @@ function make_slides(f) {
 					"subject_information" : exp.subj_data,
 					"time_in_minutes" : (Date.now() - exp.startT)/60000
 			};
-			setTimeout(function() {turk.submit(exp.data);}, 1000);
+			proliferate.submit(exp.data);
 		}
 	});
 
@@ -247,17 +247,6 @@ function init() {
       _.extend(stories[i], f)
     )
   };
-
-  // for (var i=0; i<exp.nTrials; i++) { //female names
-  //     var f;
-  //     f = {
-  //       first: firstsF[i],
-  //       //scale: _.shuffle(scales)[i]
-  //     }
-  //     exp.stims.push(
-  //       _.extend(stories[i], f)
-  //     )
-  //   };
 
   // add exclusion stims
   //exp.stims = exp.stims.concat(exclusions.filter(function() { return true } ))

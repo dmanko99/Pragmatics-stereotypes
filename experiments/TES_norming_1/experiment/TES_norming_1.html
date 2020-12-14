@@ -3,7 +3,8 @@
 <head>
 	<title>ALPS Lab Study - Finish the Story!</title>
 
-	<!--JS-->
+	<!--proliferate-->
+	<script src="https://proliferate.alps.science/static/js/proliferate.js"></script>
 
 	<!-- external general utilities -->
 	<script src="shared/js/jquery-1.11.1.min.js "></script>
@@ -11,14 +12,14 @@
     <script src="shared/js/underscore-min.js"></script>
 	<!-- if you want to draw stuff: -->
 	<!-- <script src="shared/js/raphael-min.js"></script> -->
-	<script src="shared/js/uniqueturker.js"></script>
+	<!-- <script src="shared/js/uniqueturker.js"></script> -->
 
 	<!-- cocolab experiment logic -->
 	<script src="shared/js/exp-V2.js"></script>
     <script src="shared/js/stream-V2.js"></script>
 
 	<!-- cocolab general utilities -->
-	<script src="shared/js/mmturkey.js "></script>
+	<!-- <script src="shared/js/mmturkey.js "></script> -->
     <script src="shared/js/browserCheck.js"></script>
     <script src="shared/js/utils.js"></script>
 	<!-- if you want to draw cute creatures (depends on raphael): -->
@@ -43,7 +44,7 @@
 		var ut_id = "e666acd5449e7935d81e4644ae45bbf4";
 		if (UTWorkerLimitReached(ut_id)) {
 			document.getElementById('mturk_form').style.display = 'none';
-			document.getElementsByTagName('body')[0].innerHTML = "You have already completed the maximum number of HITs allowed by this requester. Please click 'Return HIT' to avoid any impact on your approval rating.";
+			document.getElementsByTagName('body')[0].innerHTML = "You have already completed the maximum number of studies allowed by this researcher. Please click 'Return Study' to avoid any impact on your approval rating.";
 		}
 	})();
 	</script>
@@ -82,7 +83,7 @@
 		<p id="cocolab">Stanford ALPS Lab</p>
 
 		<p id="instruct-text">
-			In this study, we are concerned with how words are connected with social concepts. You are helping write small parts of different stories! Each snippet of a story will contain a couple sentences, with a key word being left blank. The HIT should take approximately 5 minutes, and you will be paid $1.00 for your participation. Thank you for agreeing to participate!
+			In this study, we are concerned with how words are connected with social concepts. You are helping write small parts of different stories! Each snippet of a story will contain a couple sentences, with a key word being left blank. The study should take approximately 5 minutes, and you will be paid $1.15 for your participation. Thank you for agreeing to participate!
 		</p>
 		<button id="start_button" type="button">Start Experiment</button>
 		<br><br><br>
@@ -145,7 +146,7 @@
 	  <p>Native Language: <input type="text" id="language"/></p>
 	  <label>(the language(s) spoken at home when you were a child)</label>
 
-	  Did you read the instructions and do you think you did the HIT correctly?</br>
+	  Did you read the instructions and do you think you did the study correctly?</br>
 	  <label><input type="radio"  name="assess" value="No"/>No</label>
 	  <label><input type="radio"  name="assess" value="Yes"/>Yes</label>
 	  <label><input type="radio"  name="assess" value="Confused"/>I was confused</label>
@@ -207,12 +208,12 @@
 		<label><option value="6"/>Conservative Republican (most conservative)</label>
 	  <select>
 
-	  <p>Did you enjoy the hit?</p>
+	  <p>Did you enjoy the study?</p>
 	  <select id="enjoyment">
 		<label><option value="-1"></option></label>
-		<label><option value="0">Worse than the Average HIT</option></label>
-		<label><option value="1" >An Average HIT</option></label>
-		<label><option value="2">Better than average HIT</option></label>
+		<label><option value="0">Worse than the Average study</option></label>
+		<label><option value="1" >An Average study</option></label>
+		<label><option value="2">Better than average study</option></label>
 	  </select>
 
 	  <p>We would be interested in any comments you have about this experiment. Please type them here:</p>
@@ -225,7 +226,7 @@
   <div id="thanks" class="slide js" >
 	<p  class="big">Thanks for your time!</p>
 	<br>
-	<p  class="big" style = "color:red"><b>NOTE: THERE ARE MUTLIPLE VERSIONS OF THIS HIT CURRENTLY ONLINE. PLEASE DON'T PARTICIPATE AGAIN TODAY; YOU WILL NOT BE COMPENSATED FOR PARTICIPATING AGAIN.</b></p>
+	<!-- <p  class="big" style = "color:red"><b>NOTE: THERE ARE MUTLIPLE VERSIONS OF THIS STUDY CURRENTLY ONLINE. PLEASE DON'T PARTICIPATE AGAIN TODAY; YOU WILL NOT BE COMPENSATED FOR PARTICIPATING AGAIN.</b></p> -->
   </div>
 
 
