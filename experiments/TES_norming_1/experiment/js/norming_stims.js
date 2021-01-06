@@ -108,7 +108,7 @@ var criticalsM = [
 		"storyline2":" in front of an audience.",
 		"tag":"jazz",
 		"stimType":"critical",
-		"list":"all"
+		"list":1
 	},{
 		"story":"genre",
 		"storyline1":"FIRST threw his jacket to the side and sunk down into his favorite chair, happy to be home after a long day. To really relax though, he pulled his phone out and started playing some ",
@@ -143,14 +143,14 @@ var criticalsM = [
 		"storyline2":" right now,&quot; he thought.",
 		"tag":"fast food",
 		"stimType":"critical",
-		"list":"all"
+		"list":1
 	},{
 		"story":"fruit",
 		"storyline1":"FIRST was excited to go to his family&rsquo;s weekly Sunday lunch. He knew there would be fresh ",
 		"storyline2":" there, which was his favorite fruit to eat.",
 		"tag":"watermelon",
 		"stimType":"critical",
-		"list":"all"
+		"list":2
 	},{
 		"story":"restaurant",
 		"storyline1":"FIRST was looking forward to dinner. He didn&rsquo;t often eat out, but a meal tonight at ",
@@ -164,14 +164,21 @@ var criticalsM = [
 		"storyline2":" , and was looking forward to taking his partner there.",
 		"tag":"poor",
 		"stimType":"critical",
-		"list":"all"
+		"list":2
 	},{
 		"story":"lazy day",
 		"storyline1":"FIRST woke up with a smile, happy that it was finally the weekend. He was looking forward to having the time to ",
 		"storyline2":" a lot today, which he hadn&rsquo;t had the time to in a while.",
 		"tag":"lazy",
 		"stimType":"critical",
-		"list":"all"
+		"list":1
+	},{
+		"story":"test",
+		"storyline1":"FIRST was nervous for his interview, feeling unprepared for the part where he would be quizzed on what he knew. He hoped it wouldn&rsquo;t turn out like his worst math test from high school that he got a ",
+		"storyline2":" percent on.",
+		"tag":"academic",
+		"stimType":"critical",
+		"list":2
 	}]
 
 var criticalsF = [
@@ -292,7 +299,7 @@ var fillersM = [
 	},{
 		"story":"alcohol",
 		"storyline1":"FIRST was excited to meet up with his friends over the weekend. It had been a while since they all got together and drank ",
-		"storyline2":" together, so he was excited to have the weekend plans.",
+		"storyline2":" together, so he was excited to see them.",
 		"tag":"food",
 		"stimType":"filler",
 		"list":"all"

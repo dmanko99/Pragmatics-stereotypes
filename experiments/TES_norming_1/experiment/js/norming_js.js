@@ -66,9 +66,7 @@ function make_slides(f) {
 			document.onkeydown = checkKey;
 			function checkKey(e) {
 				e = e || window.event;
-				//if (($('.tut_instructions').is(":visible")) && (e.keyCode == 32)) {
-					exp.go();
-				//}
+				exp.go();
 			}
 		},
 	});
@@ -82,78 +80,77 @@ function make_slides(f) {
 			var prompt, utt;
 
 			// storing this info in the slide so I can record it later?
-      this.stim = stim; 
+			this.stim = stim; 
 
 			// get index number of trial
-      this.trialNum = exp.stimscopy.indexOf(stim);
+			this.trialNum = exp.stimscopy.indexOf(stim);
 
-      // record trial start time
-      this.startTime = Date.now();
+			// record trial start time
+			this.startTime = Date.now();
 
-      // replace NAME from stimuli
-      var reminder = stim.first;
-      var story = replaceTerms(this.stim, "storyline1");
-      var storyEnd = replaceTerms(this.stim, "storyline2");
-      var wholeStory = story + storyEnd;
+			// replace NAME from stimuli
+			var reminder = stim.first;
+			var story = replaceTerms(this.stim, "storyline1");
+			var storyEnd = replaceTerms(this.stim, "storyline2");
+			var wholeStory = story + storyEnd;
 
-      //display story-dependent fields
-      //if male
-      document.getElementById('reminder_main').innerHTML = "This next snippet is about " + 
-      	reminder + ", is an American man.";
-      //if female
-      // document.getElementById('reminder_main').innerHTML = "This next story is about " + 
-      	//reminder + ", is an American woman.";
-      document.getElementById('output_main').innerHTML = story;
-      document.getElementById('output_end').innerHTML = storyEnd;
+			//display story-dependent fields
+			//if male
+			document.getElementById('reminder_main').innerHTML = "This next snippet is about " + 
+			reminder + ", an American man.";
+			//if female
+			// document.getElementById('reminder_main').innerHTML = "This next story is about " + 
+			//reminder + ",  an American woman.";
+			document.getElementById('output_main').innerHTML = story;
+			document.getElementById('output_end').innerHTML = storyEnd;
 
-      //displaying start of trial
-      $(".err").hide();
-      $('.mainQ').show();
-      document.getElementById("answer_box").value = "";
+			//displaying start of trial
+			$(".err").hide();
+			$('.mainQ').show();
+			document.getElementById("answer_box").value = '';
 
-      document.onkeydown = checkKey;
+			document.onkeydown = checkKey;
 
-      exp.test_start = 0;
-      exp.test_start = Date.now();
+			exp.test_start = 0;
+			exp.test_start = Date.now();
 
-      function checkKey(e) {
-      	e = e || window.event;
+			function checkKey(e) {
+				e = e || window.event;
+				// if (document.getElementById("answer_box").value == "") {
+				// 	$(".err").show();
+				// } else {
+					if ((e.keyCode == 13) && ($('.mainQ').is(":visible"))) {
+						exp.word = document.getElementById("answer_box").value;
+						exp.responseTime = Date.now()-exp.test_start;
+						_s.button();
+					}
+				//}
+			}
+		},
 
-      	// if (document.getElementById("answer_box").value == "") {
-      	// 	$(".err").show();
-      	// } else {
-      		if ((e.keyCode == 13) && ($('.mainQ').is(":visible"))) {
-      			exp.responseTime = Date.now()-exp.test_start;
-      			exp.word = document.getElementById("answer_box").value;
-      			_s.button();
-      		}
-      	//}
-      }      
-  },
+		button : function() {
+			if (document.getElementById("answer_box").value == "" || document.getElementById("answer_box").value == " ") {
+				$(".err").show();
+			} else {
+				this.finishTime = Date.now();
+				this.log_responses();
+				_stream.apply(this);
+			}
+		},
 
-  button : function() {
-  	if (document.getElementById("answer_box").value == "") {
-  		$(".err").show();
-  	} else {
-  		this.finishTime = Date.now();
-  		this.log_responses();
-  		_stream.apply(this);
-  	}
-  },
-
-  log_responses : function() {
-  	exp.data_trials.push({
-  		"trial_num" : this.trialNum,
-  		"response" : exp.word,
-  		"seconds_elapsed" : exp.responseTime / 1000,
-  		"first" : this.stim.first,
-  		"story" : this.stim.story,
-  		"tag": this.stim.tag,
-  		"list" : exp.currentList,
-  		"type" : this.stim.stimType
-  	});
-  }
-});
+		log_responses : function() {
+			exp.data_trials.push({
+				"trial_num" : this.trialNum,
+				"response" : exp.word,
+				"seconds_elapsed" : exp.responseTime / 1000,
+				"first" : this.stim.first,
+				"story" : this.stim.story,
+				"tag": this.stim.tag,
+				"list" : exp.currentList,
+				"type" : this.stim.stimType
+			});
+		}
+	});
 
 	slides.subj_info =  slide({
 		name : "subj_info",
@@ -195,8 +192,8 @@ function make_slides(f) {
 					"subject_information" : exp.subj_data,
 					"time_in_minutes" : (Date.now() - exp.startT)/60000
 			};
-			setTimeout(function() {turk.submit(exp.data);}, 1000);
-			//proliferate.submit(exp.data);
+			// setTimeout(function() {turk.submit(exp.data);}, 1000);
+			proliferate.submit(exp.data);
 		}
 	});
 
@@ -208,7 +205,7 @@ function init() {
 	exp.trials = [];
 	exp.catch_trials = [];
 
-	exp.nTrials = 20;
+	exp.nTrials = 18;
 
 	exp.stims = [];
 
@@ -285,14 +282,14 @@ function init() {
 	$('.slide').hide(); //hide everything
 
 	//make sure turkers have accepted HIT (or you're not in mturk)
-	$("#start_button").click(function() {
-		if (turk.previewMode) {
-			$("#mustaccept").show();
-		} else {
-			$("#start_button").click(function() {$("#mustaccept").show();});
-			exp.go();
-		}
-	});
+	// $("#start_button").click(function() {
+	// 	if (turk.previewMode) {
+	// 		$("#mustaccept").show();
+	// 	} else {
+	// 		$("#start_button").click(function() {$("#mustaccept").show();});
+	// 		exp.go();
+	// 	}
+	// });
 
 	exp.go(); //show first slide
 }
