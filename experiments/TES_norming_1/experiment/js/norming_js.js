@@ -98,10 +98,10 @@ function make_slides(f) {
 
 			//display story-dependent fields
 			//if male
-			document.getElementById('reminder_main').innerHTML = "This next snippet is about " + 
+			document.getElementById('reminder_main').innerHTML = "This snippet is from a story about " + 
 			reminder + ", an American man.";
 			//if female
-			// document.getElementById('reminder_main').innerHTML = "This next story is about " + 
+			// document.getElementById('reminder_main').innerHTML = "This snippet is from a story about " + 
 			//reminder + ",  an American woman.";
 			document.getElementById('output_main').innerHTML = story;
 			document.getElementById('output_end').innerHTML = storyEnd;
@@ -131,10 +131,12 @@ function make_slides(f) {
 		},
 
 		button : function() {
-			if (document.getElementById("answer_box").value == "" || document.getElementById("answer_box").value == " ") {
+			if (document.getElementById("answer_box").value == "" || document.getElementById("answer_box").value == " "
+				|| exp.prevItems.includes(document.getElementById("answer_box").value.toLowerCase())) {
 				$(".err").show();
 			} else {
 				this.finishTime = Date.now();
+				exp.prevItems.push(exp.word.toLowerCase());
 				this.log_responses();
 				_stream.apply(this);
 			}
@@ -190,7 +192,7 @@ function make_slides(f) {
 					"trials" : exp.data_trials,
 					"catch_trials" : exp.catch_trials,
 					"system" : exp.system,
-					"condition" : exp.condition,
+					"condition" : exp.currentList,
 					"subject_information" : exp.subj_data,
 					"time_in_minutes" : (Date.now() - exp.startT)/60000
 			};
@@ -210,6 +212,9 @@ function init() {
 	exp.nTrials = 18;
 
 	exp.stims = [];
+
+	// create array of respones to check for duplicates
+	exp.prevItems = [];
 
 	// determine what list to serve to participant
   exp.currentList = _.shuffle([1,2])[0];
