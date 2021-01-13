@@ -244,35 +244,22 @@ var criticalsF = [
 		"list":3
 	}]
 
-// var exclusions = [
-// 	{
-// 		"story":"math1",
-// 		"storyline":"5 + 4 = 9",
-// 		"tag":"exclusion_right",
-// 		"scaleType":9,
-// 		"stimType":"exclusion",
-// 		"list":"all"
-// 	},{
-// 		"story":"math2",
-// 		"storyline":"10 - 5 = 5",
-// 		"tag":"exclusion_right",
-// 		"scaleType":9,
-// 		"stimType":"exclusion",
-// 		"list":"all"
-// 	},{
-// 		"story":"math3",
-// 		"storyline":"10 + 2 = 13",
-// 		"tag":"exclusion_wrong",
-// 		"scaleType":9,
-// 		"stimType":"exclusion",
-// 		"list":"all"
-// 	},{
-// 		"story":"math4",
-// 		"storyline":"5 - 3 = 1",
-// 		"tag":"exclusion_wrong",
-// 		"scaleType":9,
-// 		"stimType":"exclusion",
-// 		"list":"all"}]
+var exclusions = [
+	{
+		"story":"exclusion1",
+		"storyline1":"FIRST was always embarrased to introduce himself. He didn&rsquo;t like that his mom named him",
+		"storyline2":".",
+		"tag":"exclusion",
+		"stimType":"exclusion",
+		"list":"all"
+	},{
+		"story":"exclusion2",
+		"storyline1":"FIRST was shocked when he heard his name called. When he heard &quot;",
+		"storyline2":"&quot; over the loudspeaker, he rushed to the counter.",
+		"tag":"exclusion",
+		"stimType":"exclusion",
+		"list":"all"
+	}]
 
 var fillersM = [
 	{

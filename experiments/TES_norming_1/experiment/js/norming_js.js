@@ -56,17 +56,24 @@ function make_slides(f) {
 	slides.i0 = slide({
 		name : "i0",
 		start: function() {
-		exp.startT = Date.now();
+			exp.startT = Date.now();
 		}
 	});
 
 	slides.instructions = slide({
 		name : "instructions",
 		start: function(){
+			$('.exclusion_reminder').hide();
+
 			document.onkeydown = checkKey;
 			function checkKey(e) {
 				e = e || window.event;
-				if (e.keyCode == 32) {
+				if (($('.tut_instructions').is(":visible")) && (e.keyCode == 32)) {
+					e = 0;
+					$('.tut_instructions').hide();
+					$('.exclusion_reminder').show();
+				}
+				if (($('.exclusion_reminder').is(":visible")) && (e.keyCode == 32)) {
 					exp.go();
 				}
 			}
@@ -105,6 +112,19 @@ function make_slides(f) {
 			//reminder + ",  an American woman.";
 			document.getElementById('output_main').innerHTML = story;
 			document.getElementById('output_end').innerHTML = storyEnd;
+			
+			// reset exclusion boolean
+			exp.exclusion = false;
+			exp.firstName = stim.first;
+
+			//if exclusion stim
+			if(stim.stimType == "exclusion") {
+				document.getElementById('heads_up').innerHTML = "Here, just fill in the blank with the main character's name.";
+				exp.exclusion = true;
+			} else {
+				document.getElementById('heads_up').innerHTML = "";
+				exp.exclusion = false;
+			}
 
 			//displaying start of trial
 			$(".err").hide();
@@ -118,43 +138,51 @@ function make_slides(f) {
 
 			function checkKey(e) {
 				e = e || window.event;
-				// if (document.getElementById("answer_box").value == "") {
-				// 	$(".err").show();
-				// } else {
-					if ((e.keyCode == 13) && ($('.mainQ').is(":visible"))) {
-						exp.word = document.getElementById("answer_box").value;
-						exp.responseTime = Date.now()-exp.test_start;
-						_s.button();
-					}
-				//}
+				if ((e.keyCode == 13) && ($('.mainQ').is(":visible"))) {
+					exp.word = document.getElementById("answer_box").value;
+					exp.responseTime = Date.now()-exp.test_start;
+					_s.button();
+				}
 			}
 		},
 
 		button : function() {
-			if (document.getElementById("answer_box").value == "" || document.getElementById("answer_box").value == " "
-				|| exp.prevItems.includes(document.getElementById("answer_box").value.toLowerCase())) {
+			if (document.getElementById("answer_box").value == "" || document.getElementById("answer_box").value == " " 
+					|| exp.prevItems.includes(document.getElementById("answer_box").value.toLowerCase())) {
 				$(".err").show();
 			} else {
+				exp.responseTime = Date.now()-exp.test_start;
+				exp.word = document.getElementById("answer_box").value;
+				if (exp.exclusion == true) {
+					if (exp.word.toLowerCase() == exp.firstName.toLowerCase()) {
+						exp.word = "pass";
+					} else {
+						exp.word = "fail";
+					}
+				}
 				this.finishTime = Date.now();
 				exp.prevItems.push(exp.word.toLowerCase());
 				this.log_responses();
 				_stream.apply(this);
-			}
-		},
-
-		log_responses : function() {
-			exp.data_trials.push({
-				"trial_num" : this.trialNum,
-				"response" : exp.word,
-				"seconds_elapsed" : exp.responseTime / 1000,
-				"first" : this.stim.first,
-				"story" : this.stim.story,
-				"tag": this.stim.tag,
-				"list" : exp.currentList,
-				"type" : this.stim.stimType
-			});
 		}
-	});
+	},
+
+
+	
+
+	log_responses : function() {
+		exp.data_trials.push({
+			"trial_num" : this.trialNum,
+			"response" : exp.word,
+			"seconds_elapsed" : exp.responseTime / 1000,
+			"first" : this.stim.first,
+			"story" : this.stim.story,
+			"tag": this.stim.tag,
+			"list" : exp.currentList,
+			"type" : this.stim.stimType
+		});
+	}
+});
 
 	slides.subj_info =  slide({
 		name : "subj_info",
@@ -176,7 +204,7 @@ function make_slides(f) {
 				gender : $("#gender").val(),
 				education : $("#education").val(),
 				affiliation : $("#affiliation").val(),
-        race : raceData.join(", "),
+				race : raceData.join(", "),
 				comments : $("#comments").val(),
 				problems: $("#problems").val(),
 				fairprice: $("#fairprice").val()
@@ -189,12 +217,12 @@ function make_slides(f) {
 		name : "thanks",
 		start : function() {
 			exp.data= {
-					"trials" : exp.data_trials,
-					"catch_trials" : exp.catch_trials,
-					"system" : exp.system,
-					"condition" : exp.currentList,
-					"subject_information" : exp.subj_data,
-					"time_in_minutes" : (Date.now() - exp.startT)/60000
+				"trials" : exp.data_trials,
+				"catch_trials" : exp.catch_trials,
+				"system" : exp.system,
+				"condition" : exp.currentList,
+				"subject_information" : exp.subj_data,
+				"time_in_minutes" : (Date.now() - exp.startT)/60000
 			};
 			// setTimeout(function() {turk.submit(exp.data);}, 1000);
 			proliferate.submit(exp.data);
@@ -209,7 +237,7 @@ function init() {
 	exp.trials = [];
 	exp.catch_trials = [];
 
-	exp.nTrials = 18;
+	exp.nTrials = 20;
 
 	exp.stims = [];
 
@@ -217,12 +245,12 @@ function init() {
 	exp.prevItems = [];
 
 	// determine what list to serve to participant
-  exp.currentList = _.shuffle([1,2])[0];
+	exp.currentList = _.shuffle([1,2])[0];
 
   // filter criticals by list
   var listCriticals = criticalsM.filter(function (stim) { //for male names
   //var listCriticals = criticalsF.filter(function (stim) { //for male names
-  return stim.list == exp.currentList
+  	return stim.list == exp.currentList
   });
 
   //add list-less stims
@@ -233,50 +261,54 @@ function init() {
   var critStories = listCriticals.concat(nolistStories.filter(
   	function() { return true} ));
 
-  // stories are the critical items for the list, plus fillers
+  // stories are the critical items for the list, plus fillers, plus exclusions
+
   // vacuous call to filter just converts json to javascript object
-  var stories = critStories.concat(fillersM.filter( //for male names
+  var fillStories = critStories.concat(fillersM.filter( //for male names
   //var stories = listCriticals.concat(fillersF.filter( //for female names
-    function() { return true } ));
+  function() { return true } ));
+  
+  // add exclusion stims
+  //exp.stims = exp.stims.concat(exclusions.filter(function() { return true } ));
+  var stories = fillStories.concat(exclusions.filter(
+  	function() { return true } ));
 
   exp.stories = stories;
 //	exp.stories = listCriticals;
 
   for (var i=0; i<exp.nTrials; i++) { //male names
-    var f;
-    f = {
-      first: firsts[i],
+  	var f;
+  	f = {
+  		first: firsts[i],
       //scale: _.shuffle(scales)[i]
-    }
-    exp.stims.push(
-      _.extend(stories[i], f)
-    )
-  };
+  }
+  exp.stims.push(
+  	_.extend(stories[i], f)
+  	)
+};
 
-  // add exclusion stims
-  //exp.stims = exp.stims.concat(exclusions.filter(function() { return true } ))
 
   exp.stims = _.shuffle(exp.stims);
 
   exp.stimscopy = exp.stims.slice(0);
 
   exp.system = {
-      Browser : BrowserDetect.browser,
-      OS : BrowserDetect.OS,
-      screenH: screen.height,
-      screenUH: exp.height,
-      screenW: screen.width,
-      screenUW: exp.width
-    };
+  	Browser : BrowserDetect.browser,
+  	OS : BrowserDetect.OS,
+  	screenH: screen.height,
+  	screenUH: exp.height,
+  	screenW: screen.width,
+  	screenUW: exp.width
+  };
 
 	//blocks of the experiment:
 	exp.structure=[
-		"bot",
-		"i0",
-		"instructions",
-		"main_task",
-		"subj_info",
-		"thanks"
+	"bot",
+	"i0",
+	"instructions",
+	"main_task",
+	"subj_info",
+	"thanks"
 	];
 
 	exp.data_trials = [];
@@ -289,14 +321,14 @@ function init() {
 	$('.slide').hide(); //hide everything
 
 	//make sure turkers have accepted HIT (or you're not in mturk)
-	 $("#start_button").click(function() {
+	$("#start_button").click(function() {
 	// 	if (turk.previewMode) {
 	// 		$("#mustaccept").show();
 	// 	} else {
 	// 		$("#start_button").click(function() {$("#mustaccept").show();});
-	 		exp.go();
+	exp.go();
 	// 	}
-	 });
+});
 
 	exp.go(); //show first slide
 }
