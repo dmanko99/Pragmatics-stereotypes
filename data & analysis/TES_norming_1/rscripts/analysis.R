@@ -4,6 +4,7 @@ library(jsonlite)
 library(bootstrap)
 library(brms)
 library(ggwordcloud)
+library(tm)
 
 source("helpers.R")
 
@@ -13,13 +14,13 @@ options(mc.cores = parallel::detectCores())
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))    
 
 # Load the data
-df = read.csv("../data/Pilot/Live/tesnorming_pilot-trials.csv", header = TRUE)%>%
+df = read.csv("../data/Norming/Live/tes_norming-trials.csv", header = TRUE)%>%
   filter(slide_type != "bot_check")
 
-subinfo = read.csv("../data/Pilot/Live/tesnorming_pilot-subject_information.csv", header = TRUE)
+subinfo = read.csv("../data/Norming/Live/tes_norming-subject_information.csv", header = TRUE)
 
 # DETERMINE MEAN COMPLETION TIME
-mean((read.csv("../data/Pilot/Live/tesnorming_pilot-time_in_minutes.csv", header = TRUE))$time_in_minutes)
+mean((read.csv("../data/Norming/Live/tes_norming-time_in_minutes.csv", header = TRUE))$time_in_minutes)
 
 # HELPER SCRIPTS
 dodge = position_dodge(.9)
@@ -29,7 +30,7 @@ ci.low <- function(x,na.rm=T) {
 ci.high <- function(x,na.rm=T) {
   quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
 
-# SANITY CHECK: SHOULD EQUAL 280
+# SANITY CHECK: SHOULD EQUAL 200
 length(unique(df$workerid))
 
 # MAKE EXCLUSIONS
@@ -73,6 +74,17 @@ df <- df %>%
 # DROP IRRELEVANT COLUMNS
 df <- subset(df, select = -c(audio, image, slide_number, slide_type, error, proliferate.condition))
 
+# CONVERT RESPONSES TO USABLE TEXT
+df$response <- as.character(df$response)
+
+df$response <- df$response %>%
+  stripWhitespace() %>%
+  removeWords( stopwords("english")) %>%
+  tolower() %>%
+  removePunctuation(preserve_intra_word_contractions = FALSE,
+                    preserve_intra_word_dashes = FALSE,
+                    ucp = FALSE)
+
 # SET UP BASIC DATAFRAMES
 critical_df <- filter(df, type == "critical")
 
@@ -85,10 +97,16 @@ byStoryResponse <- critical_df %>%
   select(name, response, story, nameCategory) %>%
   group_split(story, nameCategory)
 
+byStoryFreq <- 
+
 # FREQUENCY OF RESPONSE BY STORY - to be expanded on with more data
 df_freq <- critical_df %>%
   group_by(story) %>%
-  count('response')
+  count(response, sort = TRUE)
+
+df_freq_race <- critical_df %>%
+  group_by(story, nameCategory) %>%
+  count(response, sort = TRUE)
   
 
 # OBTAINING LIST OF RESPONSES BY STORY
@@ -122,3 +140,16 @@ wordcloud_by_story <- ggplot(critical_df, aes(label = response, color = nameCate
   geom_text_wordcloud() +
   theme_minimal() +
   facet_wrap(~story)
+
+wordcloud_freq <- ggplot(data = df_freq, aes(label = response, size = n)) +
+  geom_text_wordcloud() +
+  facet_wrap(~story)
+
+wc_freq_races <- ggplot(data = df_freq_race, aes(label = response, size = n)) +
+  geom_text_wordcloud(area_corr = TRUE) +
+  scale_size_area(max_size = 24) +
+  facet_wrap(~story)  
+
+wc_trial1 <- ggplot(data = filter(df_freq_race, story == "gray car"), aes(label = response, size = n, color = nameCategory)) +
+  geom_text_wordcloud(area_corr = TRUE, rm_outside = TRUE) +
+  scale_size_area(max_size = 10)
