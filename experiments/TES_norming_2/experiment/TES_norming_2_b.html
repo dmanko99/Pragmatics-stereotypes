@@ -1,0 +1,277 @@
+<html>
+
+	<head>
+		<title>ALPS Lab Study - Write the Story!</title>
+
+		<!-- external general utilities -->
+		<!-- <script src="shared/js/jquery-1.11.1.min.js "></script> -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="shared/full-projects/jquery-ui/jquery-ui.min.js"></script>
+		<script src="shared/js/underscore-min.js"></script>
+		<!-- if you want to draw stuff: -->
+		<!-- <script src="shared/js/raphael-min.js"></script> -->
+		<script src="shared/js/uniqueturker.js"></script>
+
+		<!--proliferate-->
+		<script src="https://proliferate.alps.science/static/js/proliferate.js"></script>
+
+		<!-- cocolab experiment logic -->
+		<script src="shared/js/exp-V2.js"></script>
+		<script src="shared/js/stream-V2.js"></script>
+
+		<!-- cocolab general utilities -->
+		<!-- <script src="shared/js/mmturkey.js "></script> -->
+		<script src="shared/js/browserCheck.js"></script>
+		<script src="shared/js/utils.js"></script>
+		<!-- if you want to draw cute creatures (depends on raphael): -->
+		<!-- <script src="shared/js/ecosystem.js"></script> -->
+
+		<!-- experiment specific helper functions -->
+		<script src="js/local-utils.js"></script>
+
+		<!--CSS-->
+		<link href="shared/full-projects/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+		<link href="shared/css/cocolab-style_css.css" rel="stylesheet" type="text/css"/>
+		<link href="css/local-style.css" rel="stylesheet" type="text/css"/>
+
+		<!-- experiment files: specifying condition!-->
+		<script src="js/norming_js.js"></script>
+		<script src="js/norming_stims_b.js"></script>
+		
+		<!-- <script src="//uniqueturker.myleott.com/lib.js" type="text/javascript"></script> -->
+
+		<!-- <script type="text/javascript">
+		(function(){
+			var ut_id = "e666acd5449e7935d81e4644ae45bbf4";
+			if (UTWorkerLimitReached(ut_id)) {
+				document.getElementById('mturk_form').style.display = 'none';
+				document.getElementsByTagName('body')[0].innerHTML = "You have already completed the maximum number of studies allowed by this researcher. Please click 'Return Study' to avoid any impact on your approval rating.";
+			}
+		})();
+	</script> -->
+
+	</head>
+
+	<body onload="init();">
+		<noscript>This task requires JavaScript.</noscript>
+		
+		<!-- Bot check slide -->
+		<div class="slide" id="bot" >
+			<h3>Are you a bot?</h3>
+			<p id="s"></p>
+			<p id="q"></p>
+			<input type="text" id="text_box"/></question>
+			<br><br>
+			<div class="err1">
+				<p2 style="color:red">Failing this question two more times will disqualify you from this study.</p2>
+			</div>
+			<div class="err2">
+				<p2 style="color:red">Failing this question one more time will disqualify you from this study.</p2>
+			</div>
+			<div class="disq">
+				<p2 style="color:red">You failed the question and you are disqualified.</p2></div>
+				<br>
+				<div class="button">
+					<button id="contbutton" onclick="_s.button()">Continue</button>
+				</div>
+				<script>
+					$("#text_box").keypress(function(event) {
+						if (event.keyCode == 13) {
+							$("#contbutton").click();
+						}
+					});
+				</script>
+			</div> 
+						
+			<!-- Information slide -->
+			<div class="slide" id="i0" >
+				<img src="shared/images/alps_lab.png" alt="Alps Lab" id="alpslogo" style="width:300"></img>
+				<p id="cocolab">Stanford ALPS Lab</p>
+
+				<p id="instruct-text">
+					In this study, we are concerned with how words are connected with social concepts. You are helping write small parts of a story! Each snippet of a story will contain a couple sentences, with a key word being left blank. The study should take approximately 8 minutes, and you will be paid $1.75 for your participation. Thank you for agreeing to participate!
+				</p>
+				<button id="start_button" type="button">Start Experiment</button>
+				<br><br><br>
+				<p id="instruct-text" align="left"><i><small><small>
+					<strong>LEGAL INFORMATION</strong>:
+					<br>We invite you to participate in a research study on language interpretation and social concepts. You will be helping write stories by filling in words for different sentences in a story.
+					<br>You will be paid for your participation at the posted rate. There are no risks or benefits of any kind involved in this study.
+					<br>If you have read this form and have decided to participate in this experiment, please understand your participation is voluntary and you have the right to withdraw your consent or discontinue participation at any time without penalty or loss of benefits to which you are otherwise entitled. The alternative is not to participate.  You have the right to refuse to answer particular questions.  The results of this research study may be presented at scientific or professional meetings or published in scientific journals.  Your individual privacy will be maintained in all published and written data resulting from the study.
+					<br><br><strong>CONTACT INFORMATION</strong>:
+					<br>If you have any questions, concerns or complaints about this research, its procedures, risks and benefits, contact the Protocol Director, Meghan Sumner, at (650)-725-9336.
+					<br>If you are not satisfied with how this study is being conducted, or if you have any concerns, complaints, or general questions about the research or your rights as a participant, please contact the Stanford Institutional Review Board (IRB) to speak to someone independent of the research team at (650)-723-2480 or toll free at 1-866-680-2906, or email at IRB2-Manager@lists.stanford.edu.  You can also write to the Stanford IRB, Stanford University, 1705 El Camino Real, Palo Alto, CA 94306 USA.
+					<br>If you agree to participate, please proceed to the study tasks.<br>
+				</small></small></i></p>
+			</div>
+						
+			<!--Instruction slides-->
+			<div class="slide" id="instructions">
+				<!-- General instructions -->
+				<div class="tut_instructions">
+					<h3><strong><big>Instructions</big></strong></h3>
+					<br>
+					<p2 align="center"> In this study, you will read unfinished snippets of a larger story. The unfinished parts of the story are left as blanks. </p2>
+					<br><br>
+					<p2 align="center">When you see the snippets, you will be able to help the author complete the story! All you have to do is fill in the empty box with the word (or phrase) that would make most sense in the blank.
+						<!-- <br><br>
+						<i>Each story is about a different main character, so remember to keep in mind who the story is about when filling in the blank.</i></p2>
+						<br><br> -->
+					<br><br>
+					<p2 align="left"><strong>The authors of these stories are interested in making them realistic and interesting, so try to write the first response that comes to mind and don't worry about using fancy or uncommon words/phrases. Also, the authors want the parts of the story to be different, so each response should be <i>unique</i> and <i>specific</i>.</strong></p2>
+					<br><br><br>
+					<p2><strong><big>Press SPACE to continue </big></strong></p2>
+				</div>
+
+				<!-- Exclusion stims warning -->
+				<div class="exclusion_reminder">
+					<br> <br>
+					<p style="text-align:left"> IMPORTANT: Occasionally you'll be asked to fill in the blank with a character's name. They will say "Here, just fill in the blank with the main character's name."
+						<i>In these questions, just answer with <strong>the name of the person who the snippet is about</strong></i>.
+					These questions just ensure that you are paying attention and that the study is working correctly.</p>
+					<br>
+					<br><br>
+					<p2><strong><big>Press SPACE to continue</big></strong></p2>
+				</div>
+			</div>
+
+			<!-- Presentation of names & "setting" -->
+			<div class="slide" id="names">
+				<div class="name_presentation">
+					<br> <br>
+					<p style="text-align:left"> The story you are helping complete is about a group of friends! The author is interested in making the story realistic and set in the U.S. in 2019 (pre-pandemic), so make sure your answers are consistent with the setting.
+					</p>
+					<br> <br>
+					<p id="name_list" style="text-align:center"></p>
+					<p style="text-align:center"> They are all American men. The snippets you'll see focuses on one charater at a time - the author wants to make each character authentic and believable so you will help with their backstories.</p>
+					<br> <br>
+					<p style="text-align:center"> Okay! That covers everything! </p>
+					<br><br>
+					<p2><strong><big>Press SPACE to continue to the snippets!</big></strong></p2>
+				</div>
+			</div>
+
+			<!-- Main task slides -->
+			<div class="slide" id="main_task">
+				<div class = "mainQ">
+					<br><br>
+					<p id = "reminder_main"></p>
+					<br>
+					<p id = "heads_up"></p>
+					<br>
+					<strong><p id="output_main" style="display:inline"></p>
+						<input type="text" id="answer_box" style="display:inline"/>
+						<strong><p id="output_end" style="display:inline"></p></strong>
+						<br><br><br>
+						<div class="button">
+							<button id="continuebutton" onclick="_s.button()">Continue</button>
+						</div>
+						<br></br>
+						<p class="err" style="color:red">Please write a word or phrase (that you have not already used) in the text box before continuing.</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Subject info questionnaire -->
+			<div class="slide"  id="subj_info">
+				<div class="long_form">
+					<div class="subj_info_title">Additional information</div>
+					<p class="info">Answering these questions is optional, but will help us understand your answers.</p>
+					
+					<p>Native Language: <input type="text" id="language"/></p>
+					<label>(the language(s) spoken at home when you were a child)</label>
+
+				Did you read the instructions and do you think you did the study correctly?</br>
+				<label><input type="radio"  name="assess" value="No"/>No</label>
+				<label><input type="radio"  name="assess" value="Yes"/>Yes</label>
+				<label><input type="radio"  name="assess" value="Confused"/>I was confused</label>
+
+				<p>Were there any problems or bugs in the experiment?</p>
+				<textarea id="problems" rows="2" cols="50"></textarea>
+
+				<p>What do you think is a fair price for the work you did?</p>
+				<textarea id="fairprice" rows="1" cols="10"></textarea>
+
+				<p>Gender:
+					<select id="gender">
+						<label><option value=""/></label>
+						<label><option value="Male"/>Male</label>
+						<label><option value="Female"/>Female</label>
+						<label><option value="Other"/>Other/Prefer not to answer</label>
+					</select>
+				</p>
+
+				<p>Age: <input type="text" id="age"/></p>
+
+				<div id="checkboxes">
+					<p>What is your Race/Ethnicity? Select all that apply:</p>
+					<ul style="list-style-type:none;" style="display: inline-block;" align="center">  
+						<li><label><input name="raceX" type="checkbox" id="Asian"  
+							value="Asian"/>Asian</label></li>
+							<li><label><input name="raceX" type="checkbox" id="AA" value="AA"/> 
+							Black or African American</label></li>
+							<li><label><input name="raceX" type="checkbox" id="Latino" value="Latino"/>
+							Hispanic or Latino</label></li>
+							<li><label><input name="raceX" type="checkbox" id="PI" value="PI"/>
+							Native Hawaiian or Other Pacific Islander </label></li>
+							<li><label><input name="raceX" type="checkbox" id="White" value="White"/>
+							White</label>
+						</li>
+					</ul>
+				</div>
+
+				<br><br><br>
+				<p>Level Of Education:
+					<select id="education">
+						<label><option value="-1"/></label>
+						<label><option value="0"/>Some High School</label>
+						<label><option value="1"/>Graduated High School</label>
+						<label><option value="2"/>Some College</label>
+						<label><option value="3"/>Graduated College</label>
+						<label><option value="4"/>Hold a higher degree</label>
+					</select>
+				</p>
+
+				<p>Which of the following options do you feel your political beliefs most closely align with?</p>
+					<select id="affiliation">
+						<label><option value="-1"/></label>
+						<label><option value="0"/>Liberal Democrat (most liberal)</label>
+						<label><option value="1"/>Democratic-leaning Independent</label>
+						<label><option value="2"/>Moderate Democrat</label>
+						<label><option value="3"/>Independent (most neutral)</label>
+						<label><option value="4"/>Moderate Republican</label>
+						<label><option value="5"/>Republican-leaning Independent</label>
+						<label><option value="6"/>Conservative Republican (most conservative)</label>
+					</select>
+
+				<p>Did you enjoy the study?</p>
+					<select id="enjoyment">
+						<label><option value="-1"></option></label>
+						<label><option value="0">Worse than the Average study</option></label>
+						<label><option value="1" >An Average study</option></label>
+						<label><option value="2">Better than average study</option></label>
+					</select>
+
+				<p>We would be interested in any comments you have about this experiment. Please type them here:</p>
+					<textarea id="comments" rows="3" cols="50"></textarea>
+					<br/>
+					<button onclick="_s.submit()">Submit</button>
+				</div>
+			</div>
+
+			<!-- Thanks // concluding slide -->
+			<div id="thanks" class="slide js" >
+				<p  class="big">Thanks for your time!</p>
+				<br>
+				<!-- <p  class="big" style = "color:red"><b>NOTE: THERE ARE MUTLIPLE VERSIONS OF THIS STUDY CURRENTLY ONLINE. PLEASE DON'T PARTICIPATE AGAIN TODAY; YOU WILL NOT BE COMPENSATED FOR PARTICIPATING AGAIN.</b></p> -->
+			</div>
+
+			<!-- Progress bar -->
+			<div class="progress">
+				<span>Progress:</span>
+				<div class="bar-wrapper">
+					<div class="bar" width="0%"></div>
+				</div>
+			</div>
+	</body>
+</html>
