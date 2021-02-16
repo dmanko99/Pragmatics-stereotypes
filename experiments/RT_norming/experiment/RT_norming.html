@@ -1,0 +1,185 @@
+<html>
+
+<head>
+    <title>ALPS Lab Study - Read the Stories!</title>
+
+    <!--JS-->
+
+    <!-- external general utilities -->
+    <!-- <script src="shared/js/jquery-1.11.1.min.js "></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="shared/full-projects/jquery-ui/jquery-ui.min.js"></script>
+    <script src="shared/js/underscore-min.js"></script>
+    <!-- if you want to draw stuff: -->
+    <!-- <script src="shared/js/raphael-min.js"></script> -->
+    <!-- <script src="shared/js/uniqueturker.js"></script> -->
+
+    <!--proliferate-->
+    <script src="https://proliferate.alps.science/static/js/proliferate.js"></script>
+
+    <!-- cocolab experiment logic -->
+    <script src="shared/js/exp-V2.js"></script>
+    <script src="shared/js/stream-V2.js"></script>
+
+    <!-- cocolab general utilities -->
+    <!-- <script src="/shared/js/mmturkey.js "></script> -->
+    <script src="shared/js/browserCheck.js"></script>
+    <script src="shared/js/utils.js"></script>
+
+    <!-- experiment specific helper functions -->
+    <script src="js/local-utils.js"></script>
+
+    <!--CSS-->
+    <link href="shared/full-projects/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+    <link href="shared/css/cocolab-style_css.css" rel="stylesheet" type="text/css"/>
+    <link href="css/local-style.css" rel="stylesheet" type="text/css"/>
+
+    <!-- experiment file -->
+    <script src="js/RT_norming_stims.js"></script>
+    <script type="text/javascript">
+      var CONDITION = 1;
+    </script>
+    <script src="js/template.js"></script>
+
+</head>
+
+<body onload="init();">
+  <noscript>This task requires JavaScript.</noscript>
+
+  <!-- Bot check slide -->
+  <div class="slide" id="bot" >
+    <h3>Are you a bot?</h3>
+    <p id="s"></p>
+    <p id="q"></p>
+    <input type="text" id="text_box"/></question>
+    <br><br>
+    <div class="err1">
+      <p2 style="color:red">Failing this question two more times will disqualify you from this study.</p2>
+    </div>
+    <div class="err2">
+      <p2 style="color:red">Failing this question one more time will disqualify you from this study.</p2>
+    </div>
+    <div class="disq">
+      <p2 style="color:red">You failed the question and you are disqualified.</p2>
+    </div>
+    <br>
+    <div class="button">
+      <button id="contbutton" onclick="_s.button()">Continue</button>
+    </div>
+    <script>
+      $("#text_box").keypress(function(event) {
+        if (event.keyCode == 13) {
+          $("#contbutton").click();
+        }
+      });
+    </script>
+  </div>
+
+  <!-- Information slide -->
+      <div class="slide" id="i0" >
+        <img src="shared/images/alps_lab.png" alt="Alps Lab" id="alpslogo" style="width:300"></img>
+        <p id="cocolab">Stanford ALPS Lab</p>
+
+        <p id="instruct-text">
+          In this experiment, you will read 24 snippets of stories word-by-word and for each sentence, answer a short question. Please pay attention, thanks! The study should take approximately 8 minutes, and you will be paid $1.75 for your participation. Thank you for agreeing to participate!
+        </p>
+        <button id="start_button" type="button">Start Experiment</button>
+        <br><br><br>
+        <p id="instruct-text" align="left"><i><small><small>
+          <strong>LEGAL INFORMATION</strong>:
+          <br>We invite you to participate in a research study on language interpretation and social concepts. You will be reading 24 snippets of stories.
+          <br>You will be paid for your participation at the posted rate. There are no risks or benefits of any kind involved in this study.
+          <br>If you have read this form and have decided to participate in this experiment, please understand your participation is voluntary and you have the right to withdraw your consent or discontinue participation at any time without penalty or loss of benefits to which you are otherwise entitled. The alternative is not to participate.  You have the right to refuse to answer particular questions.  The results of this research study may be presented at scientific or professional meetings or published in scientific journals.  Your individual privacy will be maintained in all published and written data resulting from the study.
+          <br><br><strong>CONTACT INFORMATION</strong>:
+          <br>If you have any questions, concerns or complaints about this research, its procedures, risks and benefits, contact the Protocol Director, Meghan Sumner, at (650)-725-9336.
+          <br>If you are not satisfied with how this study is being conducted, or if you have any concerns, complaints, or general questions about the research or your rights as a participant, please contact the Stanford Institutional Review Board (IRB) to speak to someone independent of the research team at (650)-723-2480 or toll free at 1-866-680-2906, or email at IRB2-Manager@lists.stanford.edu.  You can also write to the Stanford IRB, Stanford University, 1705 El Camino Real, Palo Alto, CA 94306 USA.
+          <br>If you agree to participate, please proceed to the study tasks.<br>
+        </small></small></i></p>
+      </div>
+  
+  <!-- <div class="slide" id="i0" >
+    <img src="../_shared/images/cocologo.png" alt="Stanford CoCoLab" id="cocologo"></img>
+    <p id="cocolab">Stanford Linguistics</p>
+    <p id="instruct-text">
+      In this experiment, you will read 120 sentences word-by-word and for each sentence, answer a short question. Please pay attention, thanks!
+      </p>
+    <input id="start_button" type="button" class="button" value="Start Experiment">
+  </div> -->
+
+
+  <div class="slide" id="instructions">
+
+		<h3>Instructions</h3>
+    <p>On the following pages, you will always see a phrase masked with dashes (-). To read the sentence, please press the space bar which will reveal the next word. 
+			Once you've read the sentence, please answer the yes/no question that will appear on the screen.</p>
+		
+		
+		<p><strong>Important</strong>: Please try to complete the experiment in one session without any interruptions. It should take (at most) 10 minutes.</p>
+		
+    <input type="button" class="button" value="Continue" onclick="exp.go();">
+		
+  </div>
+
+  <div class="slide" id="trial">
+    
+		<p>Please read the following sentence by pressing the space bar to reveal each word.</p>
+		<p style="font-family:monospace; margin-top:145px;font-size:18px;" id="stimulus-sentence"></p>
+		
+    <div id="comprehension-question">
+			
+			<p id="comprehension-question-q" class="question"></p>
+      <input type="button" value="Yes" id="test-response-1" class="response-buttons button">
+      <input type="button" value="No" id="test-response-2" class="response-buttons button">
+		</div>
+		
+		
+  </div>
+
+  <div class="slide" id="subj_info">
+    <div class="long_form">
+      <div class="subj_info_title">Additional information</div>
+    
+
+      <p>What's your name?</p>
+      <input type="text" id="name" />
+
+      <p>How old are you?</p>
+      <input type="text" id="age" />
+
+      <p>Please select your gender</p>
+      <select id="gender" name="gender">
+        <label><option value="f">female</option></label>
+        <label><option value="m" >male</option></label>
+        <label><option value="o">non-binary</option></label>
+      </select>
+
+      <p>Native Language: <input type="text" id="language"/></p>
+      <label>(the language(s) spoken at home when you were a child)</label>
+
+      <p>How tired are you right now?</p>
+      <select id="tirednesslvl" name="tirednesslvl">
+        <label><option value="1">well rested</option></label>
+        <label><option value="2" >a little tired</option></label>
+        <label><option value="3" >I almost fell asleep during the experiment</option></label>
+      </select><br />
+
+      <br/>      <br/>
+
+      <button onclick="_s.submit()">Submit</button>
+    </div>
+  </div>
+
+  <div id="thanks" class="slide js" >
+    <p  class="big" id="thanks-text">Thanks for your time!</p>
+  </div>
+
+  <div class="progress">
+    <span>Progress:</span>
+    <div class="bar-wrapper">
+      <div class="bar" width="0%">
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

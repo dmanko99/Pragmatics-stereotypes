@@ -69,19 +69,20 @@
 				<p2 style="color:red">Failing this question one more time will disqualify you from this study.</p2>
 			</div>
 			<div class="disq">
-				<p2 style="color:red">You failed the question and you are disqualified.</p2></div>
-				<br>
-				<div class="button">
-					<button id="contbutton" onclick="_s.button()">Continue</button>
-				</div>
-				<script>
-					$("#text_box").keypress(function(event) {
-						if (event.keyCode == 13) {
-							$("#contbutton").click();
-						}
-					});
-				</script>
-			</div> 
+				<p2 style="color:red">You failed the question and you are disqualified.</p2>
+			</div>
+			<br>
+			<div class="button">
+				<button id="contbutton" onclick="_s.button()">Continue</button>
+			</div>
+			<script>
+				$("#text_box").keypress(function(event) {
+					if (event.keyCode == 13) {
+						$("#contbutton").click();
+					}
+				});
+			</script>
+		</div>
 						
 			<!-- Information slide -->
 			<div class="slide" id="i0" >
