@@ -657,7 +657,7 @@ list1 = [
         "region": "filler"
       },
       {
-        "form": "dinner,",
+        "form": "dinner.",
         "lbr_before": false,
         "lbr_after": false,
         "region": "filler"
