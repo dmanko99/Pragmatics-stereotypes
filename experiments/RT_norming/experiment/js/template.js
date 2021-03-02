@@ -1,5 +1,11 @@
 //setting up some things
-var condition = _.sample(["list1", "list2", "list1_r", "list2_r"])
+var condition = _.sample(["list1", "list2", "list1_r", "list2_r"]);
+
+var id_list = _.shuffle(stim_ids);
+var consistencies = _.shuffle(bias_conditions);
+var race_consistencies = _.shuffle(race_conditions);
+var fillers = _.shuffle(fillers);
+
 var trial_counter = 0;
 
 function make_slides(f) {
@@ -78,9 +84,22 @@ function make_slides(f) {
     present_handle: function(stim) {
       this.stim = stim;
       this.position = 0;
+
+      //Determining which race to present
+      if(stim.race == "black") {
+        stim.first = firsts_b.pop();
+      } else {
+        stim.first = firsts_w.pop();
+      }
+
+      //Replacing the name from stimuli
+      var intro = stim["intro"].replace("FIRST", stim.first);
             
+
+      document.getElementById('context').innerHTML = intro;
+      $("context").show();
+
       $("#comprehension-question").hide();
-      
       
       var html = "";
       
@@ -88,14 +107,14 @@ function make_slides(f) {
         var word = stim.words[i];
 
         if(word.form.includes("FIRST")) {
-          word.form = word.form.replace("FIRST", firsts[trial_counter]);
+          word.form = word.form.replace("FIRST", stim.first);
         }
 
         var masked_word = word.form.replace(/./g, "-") + " ";
         html += "<span data-form=\"" + word.form + " \" data-masked-form=\"" + masked_word + "\"  id=\"stimulus-word-" + i + "\">" +  masked_word + "</span>"
-        if (word.lbr_after) {
-          html += "<br>"
-        }
+        //if (word.lbr_after) {
+          //html += "<br>"
+        //}
       }
       
       
@@ -107,7 +126,9 @@ function make_slides(f) {
       var t = this;
       
       $("#comprehension-question").hide();
-            
+      document.getElementById("context").style.color = "#000000";
+      $("#context").show();
+
       $(document).bind("keydown", function(evt) {
         if (evt.keyCode == 32) {          
           evt.preventDefault();
@@ -119,6 +140,7 @@ function make_slides(f) {
           if (t.position < t.stim.words.length) {
             $("#stimulus-word-" + t.position ).text($("#stimulus-word-" + t.position ).data("form")); 
           } else {
+            document.getElementById("context").style.color = "#FFFFFF";
             $("#comprehension-question").show();
             $(document).unbind("keydown");
           }
@@ -128,14 +150,9 @@ function make_slides(f) {
       });
       
       $("#comprehension-question-q").text(stim.question);
-      
-      
-      
-     
-     
-     
-
+        
     },
+
     button : function(response) {
       this.response_correct = response == this.stim.correct_answer;
       this.log_responses();
@@ -156,6 +173,8 @@ function make_slides(f) {
           "rt": this.response_times[i+1] - this.response_times[i], 
           "type": this.stim.type,
           "response_correct": this.response_correct ? 1 : 0,
+          "bias": this.stim.bias,
+          "nameCategory": this.stim.race,
           "trial_no": trial_counter
         }); 
       }
@@ -172,10 +191,16 @@ function make_slides(f) {
       //if (e.preventDefault) e.preventDefault(); // I don't know what this means.
       exp.subj_data = {
         language : $("#language").val(),
-        name : $("#name").val(),
-        gender : $('#gender').val(),
-        tirednesslvl : $('#tirednesslvl').val(),
-        age : $("#age").val()
+        enjoyment : $("#enjoyment").val(),
+        asses : $('input[name="assess"]:checked').val(),
+        age : $("#age").val(),
+        gender : $("#gender").val(),
+        education : $("#education").val(),
+        affiliation : $("#affiliation").val(),
+        race : raceData.join(", "),
+        comments : $("#comments").val(),
+        problems: $("#problems").val(),
+        fairprice: $("#fairprice").val()
       };
       exp.go(); //use exp.go() if and only if there is no "present" data.
     }
@@ -204,37 +229,90 @@ function init() {
   exp.condition = condition;
   exp.trials = [];
   exp.catch_trials = [];
+  exp.nTrials = 18;
+
 
   function build_trials() {
-    if (condition == "list1") {
-      return _.shuffle(list1);
-    }
+    var stim_list = [];
+    var chosen_id = "";
+    var chosen_consistency = "";
     
-    if (condition == "list2") {
-      return _.shuffle(list2);
+    for (var j=0; j<exp.nTrials; j++) {
+      chosen_id = id_list.pop();
+      if (critical_ids.includes(chosen_id)) {
+        chosen_consistency = consistencies.pop();
+        if (chosen_consistency == "white_consistent") {
+          for (var s=0; s<white_consistent.length; s++) {
+            if (white_consistent[s]["trial_id"] == chosen_id) {
+              stim_list.push(white_consistent[s]);
+            }
+          }
+        } else if (chosen_consistency == "white_inconsistent") {
+          for (var t=0; t<white_inconsistent.length; t++) {
+            if (white_inconsistent[t]["trial_id"] == chosen_id) {
+              stim_list.push(white_inconsistent[t]);
+            }
+          }
+        } else if (chosen_consistency == "black_consistent") {
+          for (var u=0; u<black_consistent.length; u++) {
+            if (black_consistent[u]["trial_id"] == chosen_id) {
+              stim_list.push(black_consistent[u]);
+            }
+          }
+        } else if (chosen_consistency == "black_inconsistent") {
+          for (var v=0; v<black_inconsistent.length; v++) {
+            if (black_inconsistent[v]["trial_id"] == chosen_id) {
+              stim_list.push(black_inconsistent[v]);
+            }
+          }
+        }
+      } else if (filler_ids.includes(chosen_id)) {
+        chosen_race = race_consistencies.pop();
+        if(chosen_race == "white") {
+          for (var w=0; w<white_fillers.length; w++) {
+            if (white_fillers[w]["trial_id"] == chosen_id) {
+              stim_list.push(white_fillers[w]);
+            }
+          }
+        } else if(chosen_race == "black") {
+          for (var x=0; x<black_fillers.length; x++) {
+            if (black_fillers[x]["trial_id"] == chosen_id) {
+              stim_list.push(black_fillers[x]);
+            }
+          }
+        }
+      }
     }
+    return (stim_list);
+    // if (condition == "list1") {
+    //   return _.shuffle(list1);
+    // }
     
-    if (condition == "list1_r") {
-      return (_.shuffle(list1)).reverse();
-    }
+    // if (condition == "list2") {
+    //   return _.shuffle(list2);
+    // }
     
-    if (condition == "list2_r") {
-      return (_.shuffle(list2)).reverse();
-    }
+    // if (condition == "list1_r") {
+    //   return (_.shuffle(list1)).reverse();
+    // }
+    
+    // if (condition == "list2_r") {
+    //   return (_.shuffle(list2)).reverse();
+    // }
   }
 
   exp.train_stims = build_trials(); //can randomize between subject conditions here
 
-  for (var i=0; i<exp.nTrials; i++) { //male names
-    var f;
-    f = {
-      first: firsts[i],
-      //scale: _.shuffle(scales)[i]
-    }
-    exp.train_stims.push(
-      _.extend(train_stims[i], f)
-      )
-  };
+  // for (var i=0; i<exp.nTrials; i++) { //male names
+  //   var f;
+  //   f = {
+  //     first: firsts[i],
+  //     //scale: _.shuffle(scales)[i]
+  //   }
+  //   exp.train_stims.push(
+  //     _.extend(train_stims[i], f)
+  //     )
+  // };
 
   
   exp.system = {

@@ -35,10 +35,12 @@
     <link href="css/local-style.css" rel="stylesheet" type="text/css"/>
 
     <!-- experiment file -->
+    <script src="stims/RT_criticals.js"></script>
+    <script src="stims/RT_fillers.js"></script>
     <script src="js/RT_norming_stims.js"></script>
-    <script type="text/javascript">
+<!--     <script type="text/javascript">
       var CONDITION = 1;
-    </script>
+    </script> -->
     <script src="js/template.js"></script>
 
 </head>
@@ -96,25 +98,16 @@
           <br>If you agree to participate, please proceed to the study tasks.<br>
         </small></small></i></p>
       </div>
-  
-  <!-- <div class="slide" id="i0" >
-    <img src="../_shared/images/cocologo.png" alt="Stanford CoCoLab" id="cocologo"></img>
-    <p id="cocolab">Stanford Linguistics</p>
-    <p id="instruct-text">
-      In this experiment, you will read 120 sentences word-by-word and for each sentence, answer a short question. Please pay attention, thanks!
-      </p>
-    <input id="start_button" type="button" class="button" value="Start Experiment">
-  </div> -->
 
 
   <div class="slide" id="instructions">
 
 		<h3>Instructions</h3>
-    <p>On the following pages, you will always see a phrase masked with dashes (-). To read the sentence, please press the space bar which will reveal the next word. 
+    <p>On the following pages, you will always see two sentences. One sentence will be visible — this is preceding sentence in the story. The other sentence will be masked with dashes (-). To read the it, please press the space bar which will reveal the next word. 
 			Once you've read the sentence, please answer the yes/no question that will appear on the screen.</p>
 		
 		
-		<p><strong>Important</strong>: Please try to complete the experiment in one session without any interruptions. It should take (at most) 10 minutes.</p>
+		<p><strong>Important</strong>: Please try to complete the experiment in one session without any interruptions. It should take (at most) 10 minutes. Also, make sure this window takes up the whole screen to ensure that all of the words in the sentence fit on the page. If you cannot see a word, zoom out on your browser window.</p>
 		
     <input type="button" class="button" value="Continue" onclick="exp.go();">
 		
@@ -122,15 +115,17 @@
 
   <div class="slide" id="trial">
     
-		<p>Please read the following sentence by pressing the space bar to reveal each word.</p>
-		<p style="font-family:monospace; margin-top:145px;font-size:18px;" id="stimulus-sentence"></p>
-		
+		<p id="header">After you've read the context, please read the following sentence by pressing the space bar to reveal each word.</p>
+    <br>
+    <p style="font-family:monospace; margin-top:18px;font-size:18px;" id="context"></p>
+    <br>
+		<p style="font-family:monospace; margin-top:18px;font-size:18px;" id="stimulus-sentence"></p>
+
     <div id="comprehension-question">
-			
-			<p id="comprehension-question-q" class="question"></p>
+      <p id="comprehension-question-q" class="question"></p>
       <input type="button" value="Yes" id="test-response-1" class="response-buttons button">
       <input type="button" value="No" id="test-response-2" class="response-buttons button">
-		</div>
+    </div>
 		
 		
   </div>
@@ -138,34 +133,88 @@
   <div class="slide" id="subj_info">
     <div class="long_form">
       <div class="subj_info_title">Additional information</div>
-    
 
-      <p>What's your name?</p>
-      <input type="text" id="name" />
-
-      <p>How old are you?</p>
-      <input type="text" id="age" />
-
-      <p>Please select your gender</p>
-      <select id="gender" name="gender">
-        <label><option value="f">female</option></label>
-        <label><option value="m" >male</option></label>
-        <label><option value="o">non-binary</option></label>
-      </select>
+      <p class="info">Answering these questions is optional, but will help us understand your answers.</p>
 
       <p>Native Language: <input type="text" id="language"/></p>
-      <label>(the language(s) spoken at home when you were a child)</label>
+        <label>(the language(s) spoken at home when you were a child)</label>
 
-      <p>How tired are you right now?</p>
-      <select id="tirednesslvl" name="tirednesslvl">
-        <label><option value="1">well rested</option></label>
-        <label><option value="2" >a little tired</option></label>
-        <label><option value="3" >I almost fell asleep during the experiment</option></label>
-      </select><br />
+      <p>Did you read the instructions and do you think you did the study correctly?</p></br>
+        <label><input type="radio"  name="assess" value="No"/>No</label>
+        <label><input type="radio"  name="assess" value="Yes"/>Yes</label>
+        <label><input type="radio"  name="assess" value="Confused"/>I was confused</label>
 
-      <br/>      <br/>
+      <p>Were there any problems or bugs in the experiment?</p>
+      <textarea id="problems" rows="2" cols="50"></textarea>
 
+      <p>What do you think is a fair price for the work you did?</p>
+      <textarea id="fairprice" rows="1" cols="10"></textarea>
+
+      <p>Gender:
+        <select id="gender">
+          <label><option value=""/></label>
+          <label><option value="Male"/>Male</label>
+          <label><option value="Female"/>Female</label>
+          <label><option value="Other"/>Other/Prefer not to answer</label>
+        </select>
+      </p>
+
+      <p>Age: <input type="text" id="age"/></p>
+        <div id="checkboxes">
+          <p>What is your Race/Ethnicity? Select all that apply:</p>
+          <ul style="list-style-type:none;" style="display: inline-block;" align="center">  
+            <li><label><input name="raceX" type="checkbox" id="Asian"  
+              value="Asian"/>Asian</label></li>
+              <li><label><input name="raceX" type="checkbox" id="AA" value="AA"/> 
+              Black or African American</label></li>
+              <li><label><input name="raceX" type="checkbox" id="Latino" value="Latino"/>
+              Hispanic or Latino</label></li>
+              <li><label><input name="raceX" type="checkbox" id="PI" value="PI"/>
+              Native Hawaiian or Other Pacific Islander </label></li>
+              <li><label><input name="raceX" type="checkbox" id="White" value="White"/>
+              White</label>
+            </li>
+          </ul>
+        </div>
+
+      <p>Level Of Education:
+        <select id="education">
+          <label><option value="-1"/></label>
+          <label><option value="0"/>Some High School</label>
+          <label><option value="1"/>Graduated High School</label>
+          <label><option value="2"/>Some College</label>
+          <label><option value="3"/>Graduated College</label>
+          <label><option value="4"/>Hold a higher degree</label>
+        </select>
+      </p>
+
+      <p>Which of the following options do you feel your political beliefs most closely align with?</p>
+        <select id="affiliation">
+          <label><option value="-1"/></label>
+          <label><option value="0"/>Liberal Democrat (most liberal)</label>
+          <label><option value="1"/>Democratic-leaning Independent</label>
+          <label><option value="2"/>Moderate Democrat</label>
+          <label><option value="3"/>Independent (most neutral)</label>
+          <label><option value="4"/>Moderate Republican</label>
+          <label><option value="5"/>Republican-leaning Independent</label>
+          <label><option value="6"/>Conservative Republican (most conservative)</label>
+        </select>
+
+      <p>Did you enjoy the study?</p>
+        <select id="enjoyment">
+          <label><option value="-1"></option></label>
+          <label><option value="0">Worse than the Average study</option></label>
+          <label><option value="1" >An Average study</option></label>
+          <label><option value="2">Better than average study</option></label>
+        </select>
+
+      <p>We would be interested in any comments you have about this experiment. Please type them here:</p>
+        <textarea id="comments" rows="3" cols="50"></textarea>
+      
+      <br><br>
+      
       <button onclick="_s.submit()">Submit</button>
+
     </div>
   </div>
 
