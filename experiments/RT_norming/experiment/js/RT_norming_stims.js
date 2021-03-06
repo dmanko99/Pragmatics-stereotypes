@@ -30,6 +30,11 @@ var bnames = ["Trevon",
 "Rasheed",
 "Deshawn"]
 
+var practice_names = ["Alex",
+"John",
+"David",
+"James"]
+
 //list of names
 var firsts_w = _.shuffle(_.sample(wnames, 9))
 var firsts_b = _.shuffle(_.sample(bnames, 9))
@@ -52,6 +57,7 @@ var filler_ids = ["gray car", "blue car", "sister", "friend",
                 "debate", "job"]
 
 var stim_ids = critical_ids.concat(filler_ids)
+
 
 // HARD-CODED CRITICAL & FILLER STIMS WITHOUT CONSISTENCY ENCODED
 //    (REPLACED BY RT_CRITICALS.JS & RT_FILLERS.JS)

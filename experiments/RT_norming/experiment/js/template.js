@@ -5,8 +5,11 @@ var id_list = _.shuffle(stim_ids);
 var consistencies = _.shuffle(bias_conditions);
 var race_consistencies = _.shuffle(race_conditions);
 var fillers = _.shuffle(fillers);
+var practice_trials = _.shuffle(practice_stims);
+var practice_firsts = _.shuffle(practice_names);
 
 var trial_counter = 0;
+var practice_trial_counter = 0;
 
 function make_slides(f) {
   var   slides = {};
@@ -77,6 +80,134 @@ function make_slides(f) {
     }
   });
 
+  slides.practice_intro = slide({
+    name: "practice_intro",
+    button : function() {
+      exp.go(); //use exp.go() if and only if there is no "present" data.
+    }
+  })
+
+  slides.practice = slide({
+    name: "practice",
+    present: exp.practice_stims,
+    present_handle: function(stim) {
+      this.stim = stim;
+      this.position = 0;
+
+      stim.first = practice_firsts.pop();
+      //Replacing the name from stimuli
+      var intro = stim["intro"].replace("FIRST", stim.first);
+            
+      //actual examples
+      $("practice_examples").show();
+
+      document.getElementById('practice_context').innerHTML = intro;
+      $("practice_context").show();
+      
+
+      $("#practice_comprehension-question").hide();
+      
+      var html = "";
+      
+      for (var i = 0; i < stim.words.length; i++) {
+        var word = stim.words[i];
+
+        if(word.form.includes("FIRST")) {
+          word.form = word.form.replace("FIRST", stim.first);
+        }
+
+
+        //taking care of extra dashes for quotes and apostrophes
+        if(word.form.includes("&rsquo;")) {
+          var no_apostrophe = word.form.replace("&rsquo;", "'");
+          var masked_word = no_apostrophe.replace(/./g, "-") + " ";
+        } else if (word.form.includes("&quot;")) {
+          var no_quote = word.form.replace("&quot;", "+");
+          var masked_word = no_quote.replace(/./g, "-") + " ";
+        } else {
+          var masked_word = word.form.replace(/./g, "-") + " ";
+        }
+
+        html += "<span data-practice_form=\"" + word.form + 
+        " \" data-practice_masked-form=\"" + masked_word + 
+        "\"  id=\"practice_stimulus-word-" + i + "\">" +  masked_word + "</span>"
+        //if (word.lbr_after) {
+          //html += "<br>"
+        //}
+      }
+      
+      
+      this.response_times = [];
+      
+      $("#practice_stimulus-sentence").html(html);
+      
+      
+      var t = this;
+      
+      $("#practice_comprehension-question").hide();
+      // document.getElementById("context").style.color = "#000000";
+      $("#practice_stimulus-sentence").show();
+      $("#practice_context").show();
+
+      $(document).bind("keydown", function(evt) {
+        if (evt.keyCode == 32) {          
+          evt.preventDefault();
+          t.response_times.push(Date.now());
+          if (t.position > 0) {
+            var prev_idx = t.position - 1;
+            $("#practice_stimulus-word-" + prev_idx).text($("#practice_stimulus-word-" + prev_idx).data("practice_masked-form"));
+          }
+          if (t.position < t.stim.words.length) {
+            $("#practice_stimulus-word-" + t.position ).text($("#practice_stimulus-word-" + t.position ).data("practice_form")); 
+          } else {
+            //document.getElementById("context").style.color = "#FFFFFF";
+            $("#practice_context").hide();
+            $("#practice_stimulus-sentence").hide();
+            $("#practice_comprehension-question").show();
+            $(document).unbind("keydown");
+          }
+          t.position++;
+        }
+        
+      });
+      
+      $("#practice_comprehension-question-q").text(stim.question);
+
+        
+    },
+
+    button : function(response) {
+      this.response_correct = response == this.stim.correct_answer;
+      this.log_practice_responses();
+      _stream.apply(this);
+    },
+
+    log_practice_responses : function() {
+      for (var i = 0; i < this.stim.words.length; i++) {
+        var word = this.stim.words[i];
+        exp.data_trials.push({
+          "trial_id": this.stim.trial_id,
+          "word_idx": i,
+          "first":firsts[trial_counter],
+          "form": word.form,
+          "region": word.region,
+          "rt": this.response_times[i+1] - this.response_times[i], 
+          "type": "practice",
+          "response_correct": this.response_correct ? 1 : 0,
+          "trial_no": trial_counter
+        }); 
+      }
+      practice_trial_counter++;
+    }
+
+  });
+
+  slides.transition = slide({
+    name: "transition",
+    button : function() {
+      exp.go(); //use exp.go() if and only if there is no "present" data.
+    }
+  });
 
   slides.trial = slide({
     name: "trial",
@@ -110,8 +241,21 @@ function make_slides(f) {
           word.form = word.form.replace("FIRST", stim.first);
         }
 
-        var masked_word = word.form.replace(/./g, "-") + " ";
-        html += "<span data-form=\"" + word.form + " \" data-masked-form=\"" + masked_word + "\"  id=\"stimulus-word-" + i + "\">" +  masked_word + "</span>"
+
+        //taking care of extra dashes for quotes and apostrophes
+        if(word.form.includes("&rsquo;")) {
+          var no_apostrophe = word.form.replace("&rsquo;", "'");
+          var masked_word = no_apostrophe.replace(/./g, "-") + " ";
+        } else if (word.form.includes("&quot;")) {
+          var no_quote = word.form.replace("&quot;", "+");
+          var masked_word = no_quote.replace(/./g, "-") + " ";
+        } else {
+          var masked_word = word.form.replace(/./g, "-") + " ";
+        }
+
+        html += "<span data-form=\"" + word.form + 
+        " \" data-masked-form=\"" + masked_word + 
+        "\"  id=\"stimulus-word-" + i + "\">" +  masked_word + "</span>"
         //if (word.lbr_after) {
           //html += "<br>"
         //}
@@ -121,13 +265,12 @@ function make_slides(f) {
       this.response_times = [];
       
       $("#stimulus-sentence").html(html);
-      
+      $("#stimulus-sentence").show();
       
       var t = this;
       
       $("#comprehension-question").hide();
-      document.getElementById("context").style.color = "#000000";
-      $("#context").show();
+      //document.getElementById("context").style.color = "#000000";
 
       $(document).bind("keydown", function(evt) {
         if (evt.keyCode == 32) {          
@@ -140,7 +283,9 @@ function make_slides(f) {
           if (t.position < t.stim.words.length) {
             $("#stimulus-word-" + t.position ).text($("#stimulus-word-" + t.position ).data("form")); 
           } else {
-            document.getElementById("context").style.color = "#FFFFFF";
+            //document.getElementById("context").style.color = "#FFFFFF";
+            $("#context").hide();
+            $("#stimulus-sentence").hide();
             $("#comprehension-question").show();
             $(document).unbind("keydown");
           }
@@ -302,6 +447,7 @@ function init() {
   }
 
   exp.train_stims = build_trials(); //can randomize between subject conditions here
+  exp.practice_stims = practice_trials;
 
   // for (var i=0; i<exp.nTrials; i++) { //male names
   //   var f;
@@ -328,6 +474,9 @@ function init() {
   "bot",
   "i0",
   "instructions",
+  "practice_intro",
+  "practice",
+  "transition",
   "trial",
   'subj_info',
   'thanks'];

@@ -126,3 +126,44 @@ header_filler = sprintf("var white_fillers = %s; \nvar black_fillers = %s; \n",
                  whitefillerJSON, blackfillerJSON)
 
 write_file(header_filler, "RT_fillers.js")
+
+
+### WORKING WITH PRACTICE STIMS
+# New helper function
+make_wordsSubArrayPractice <- function(crit_sentence, crit_word) {
+  
+  wordsList <- str_split(crit_sentence, " ")
+  outputDF <- setNames(data.frame(wordsList), c("form")) %>%
+    mutate(region = case_when(form == "FIRST" ~ "name",
+                              TRUE ~ "filler")) %>%
+    mutate(form_order = row_number())
+  
+  return(outputDF)
+  
+}
+# Read in the stims
+practicestims <- read_csv("RT_practice.csv")
+
+# Make list of lists of word features (for each filler sentence)
+
+wordsList_prac = c()
+
+for (i in 1:nrow(practicestims)) {
+  words_prac <- make_wordsSubArrayPractice(practicestims[i, "crit_sentence"],
+                                   practicestims[i, "crit_word"])
+  wordsList_prac[[i]] = words_prac
+}
+
+rm(words_prac)
+
+practicestims$words <- wordsList_prac
+
+practicestims_toJSON <- practicestims %>%
+  rename(question = comp_question, correct_answer = answer,
+         trial_id = id, intro = intro_sentence) %>%
+  mutate(type = "practice") %>%
+  select(words, intro, question, correct_answer, trial_id)
+
+practice_header_filler <- sprintf("var practice_stims = %s;", toJSON(practicestims_toJSON))
+
+write_file(practice_header_filler, "RT_practice.js")

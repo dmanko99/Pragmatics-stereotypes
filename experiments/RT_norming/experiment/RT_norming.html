@@ -37,6 +37,7 @@
     <!-- experiment file -->
     <script src="stims/RT_criticals.js"></script>
     <script src="stims/RT_fillers.js"></script>
+    <script src="stims/RT_practice.js"></script>
     <script src="js/RT_norming_stims.js"></script>
 <!--     <script type="text/javascript">
       var CONDITION = 1;
@@ -100,11 +101,11 @@
       </div>
 
 
+  <!-- study-specific instructions -->
   <div class="slide" id="instructions">
 
 		<h3>Instructions</h3>
-    <p>On the following pages, you will always see two sentences. One sentence will be visible — this is preceding sentence in the story. The other sentence will be masked with dashes (-). To read the it, please press the space bar which will reveal the next word. 
-			Once you've read the sentence, please answer the yes/no question that will appear on the screen.</p>
+    <p>On the following pages, you will always read two-sentence stories. The first sentence will be fully displayed so you can read it. The second sentence will be masked with dashes (-). To read the it, press the space bar, which will reveal the next word. Once you've read the story, please answer the yes/no question that will appear on the screen.</p>
 		
 		
 		<p><strong>Important</strong>: Please try to complete the experiment in one session without any interruptions. It should take (at most) 10 minutes. Also, make sure this window takes up the whole screen to ensure that all of the words in the sentence fit on the page. If you cannot see a word, zoom out on your browser window.</p>
@@ -113,9 +114,47 @@
 		
   </div>
 
+  <div class = "slide" id = "practice_intro">
+    <br><br>
+    <p id="header">We'll start with some practice examples! After you've read the first sentence, please read the second one by pressing the space bar to reveal each word.</p>
+    <br>
+    <input type="button" class="button" value="Continue" onclick="exp.go();">
+  </div>
+
+  <!-- practice trials (4 examples) -->
+  <div class="slide" id="practice">
+
+    <div id="practice_examples">
+      <br><br>
+      <p id="practice_header">Remember, after you've read the first sentence, please read the second one by pressing the space bar to reveal each word. Then answer the question based on the sentences.</p>
+      <br>
+      <p style="font-family:monospace; margin-top:18px;font-size:18px;" id="practice_context"></p>
+      <br>
+      <p style="font-family:monospace; margin-top:18px;font-size:18px;" id="practice_stimulus-sentence"></p>
+
+      <div id="practice_comprehension-question">
+        <p id="practice_comprehension-question-q" class="question"></p>
+        <input type="button" value="Yes" id="practice_test-response-1" class="response-buttons button">
+        <input type="button" value="No" id="practice_test-response-2" class="response-buttons button">
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- practice -> main transition -->
+  <div class="slide" id="transition">
+    <br><br>
+    <p id="header">Great! Now we can start the real experiment.</p>
+    <br><br>
+    <input type="button" class="button" value="Continue" onclick="exp.go();">
+  </div>
+
+
+  <!-- main trial slides -->
   <div class="slide" id="trial">
     
-		<p id="header">After you've read the context, please read the following sentence by pressing the space bar to reveal each word.</p>
+		<br>
     <br>
     <p style="font-family:monospace; margin-top:18px;font-size:18px;" id="context"></p>
     <br>
@@ -126,10 +165,11 @@
       <input type="button" value="Yes" id="test-response-1" class="response-buttons button">
       <input type="button" value="No" id="test-response-2" class="response-buttons button">
     </div>
-		
-		
+
   </div>
 
+
+  <!-- subject information (demographic & enjoyment, etc.) -->
   <div class="slide" id="subj_info">
     <div class="long_form">
       <div class="subj_info_title">Additional information</div>
