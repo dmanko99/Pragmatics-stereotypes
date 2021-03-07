@@ -145,7 +145,6 @@ function make_slides(f) {
       var t = this;
       
       $("#practice_comprehension-question").hide();
-      // document.getElementById("context").style.color = "#000000";
       $("#practice_stimulus-sentence").show();
       $("#practice_context").show();
 
@@ -160,7 +159,6 @@ function make_slides(f) {
           if (t.position < t.stim.words.length) {
             $("#practice_stimulus-word-" + t.position ).text($("#practice_stimulus-word-" + t.position ).data("practice_form")); 
           } else {
-            //document.getElementById("context").style.color = "#FFFFFF";
             $("#practice_context").hide();
             $("#practice_stimulus-sentence").hide();
             $("#practice_comprehension-question").show();
@@ -227,8 +225,8 @@ function make_slides(f) {
       var intro = stim["intro"].replace("FIRST", stim.first);
             
 
-      document.getElementById('context').innerHTML = intro;
-      $("#context").show();
+      document.getElementById('context_intro').innerHTML = intro;
+      $("#context_intro").show();
 
       $("#comprehension-question").hide();
       
@@ -270,7 +268,6 @@ function make_slides(f) {
       var t = this;
       
       $("#comprehension-question").hide();
-      //document.getElementById("context").style.color = "#000000";
 
       $(document).bind("keydown", function(evt) {
         if (evt.keyCode == 32) {          
@@ -283,8 +280,7 @@ function make_slides(f) {
           if (t.position < t.stim.words.length) {
             $("#stimulus-word-" + t.position ).text($("#stimulus-word-" + t.position ).data("form")); 
           } else {
-            //document.getElementById("context").style.color = "#FFFFFF";
-            $("#context").hide();
+            $("#context_intro").hide();
             $("#stimulus-sentence").hide();
             $("#comprehension-question").show();
             $(document).unbind("keydown");
