@@ -227,7 +227,6 @@ function make_slides(f) {
 
       document.getElementById('context_intro').innerHTML = intro;
       $("#context_intro").show();
-
       $("#comprehension-question").hide();
       
       var html = "";
