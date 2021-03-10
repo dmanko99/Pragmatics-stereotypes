@@ -120,12 +120,12 @@ function make_slides(f) {
         //taking care of extra dashes for quotes and apostrophes
         if(word.form.includes("&rsquo;")) {
           var no_apostrophe = word.form.replace("&rsquo;", "'");
-          var masked_word = no_apostrophe.replace(/./g, "-") + " ";
+          var masked_word = no_apostrophe.replace(/./g, "&#8209;") + " ";
         } else if (word.form.includes("&quot;")) {
-          var no_quote = word.form.replace("&quot;", "+");
-          var masked_word = no_quote.replace(/./g, "-") + " ";
+          var no_quote = word.form.replaceAll("&quot;", "+");
+          var masked_word = no_quote.replace(/./g, "&#8209;") + " ";
         } else {
-          var masked_word = word.form.replace(/./g, "-") + " ";
+          var masked_word = word.form.replace(/./g, "&#8209;") + " ";
         }
 
         html += "<span data-practice_form=\"" + word.form + 
@@ -242,12 +242,12 @@ function make_slides(f) {
         //taking care of extra dashes for quotes and apostrophes
         if(word.form.includes("&rsquo;")) {
           var no_apostrophe = word.form.replace("&rsquo;", "'");
-          var masked_word = no_apostrophe.replace(/./g, "-") + " ";
+          var masked_word = no_apostrophe.replace(/./g, "&#8209;") + " ";
         } else if (word.form.includes("&quot;")) {
-          var no_quote = word.form.replace("&quot;", "+");
-          var masked_word = no_quote.replace(/./g, "-") + " ";
+          var no_quote = word.form.replaceAll("&quot;", "+");
+          var masked_word = no_quote.replace(/./g, "&#8209;") + " ";
         } else {
-          var masked_word = word.form.replace(/./g, "-") + " ";
+          var masked_word = word.form.replace(/./g, "&#8209;") + " ";
         }
 
         html += "<span data-form=\"" + word.form + 
