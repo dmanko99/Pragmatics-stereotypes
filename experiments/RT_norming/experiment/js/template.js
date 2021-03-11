@@ -328,6 +328,14 @@ function make_slides(f) {
   slides.subj_info =  slide({
     name : "subj_info",
     submit : function(e){
+      var raceData = new Array();
+      var raceQs = document.getElementById("checkboxes");
+      var chks = raceQs.getElementsByTagName("INPUT");
+      for (var i = 0; i < chks.length; i++) {
+        if (chks[i].checked) {
+          raceData.push(chks[i].value);
+        }
+      };
       //if (e.preventDefault) e.preventDefault(); // I don't know what this means.
       exp.subj_data = {
         language : $("#language").val(),
@@ -473,8 +481,8 @@ function init() {
   "practice",
   "transition",
   "trial",
-  'subj_info',
-  'thanks'];
+  "subj_info",
+  "thanks"];
 
   exp.data_trials = [];
   //make corresponding slides:
