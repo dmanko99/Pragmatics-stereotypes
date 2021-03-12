@@ -305,7 +305,7 @@ function make_slides(f) {
         exp.data_trials.push({
           "trial_id": this.stim.trial_id,
           "word_idx": i,
-          "first":firsts[trial_counter],
+          "first":this.stim.first,
           "form": word.form,
           "region": word.region,
           "lbr_before": word.lbr_before ? 1 : 0,

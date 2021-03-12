@@ -38,7 +38,7 @@ var practice_names = ["Alex",
 //list of names
 var firsts_w = _.shuffle(_.sample(wnames, 9))
 var firsts_b = _.shuffle(_.sample(bnames, 9))
-var firsts = firsts_b.concat(firsts_b)
+var firsts = firsts_w.concat(firsts_b)
 
 //list of conditions
 var bias_conditions = ["white_consistent", "white_inconsistent",
