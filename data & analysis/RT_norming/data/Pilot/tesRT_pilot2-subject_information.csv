@@ -1,0 +1,5 @@
+workerid,proliferate.condition,affiliation,age,asses,comments,education,enjoyment,fairprice,gender,language,problems,race,error
+247,pilot,0,31,No,,2,2,1.00,Male,English,,AA,
+246,pilot,2,37,Yes,,4,2,0.25,Male,Spanish,No,Latino,
+249,pilot,0,23,Yes,,2,2,2.00,Male,Spanish,None at all,Latino,
+250,pilot,2,30,Yes,,3,2,,Female,Portuguese,No.,White,

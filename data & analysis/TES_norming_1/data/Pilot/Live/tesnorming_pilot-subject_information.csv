@@ -1,0 +1,6 @@
+workerid,proliferate.condition,affiliation,age,asses,comments,education,enjoyment,fairprice,gender,language,problems,race,error
+29,pilot,0,21,Yes,"This study was interesting and quite fun actually, I'd like to do more of these in the future.",2,2,1.50,Female,English,No,White,
+27,pilot,2,19,Yes,,2,2,1.5,Female,English,No,Asian,
+30,pilot,1,27,Yes,,3,1,1.5,Male,english,no,Asian,
+28,pilot,3,28,Yes,,3,1,0.25,Male,Russian,None,White,
+26,pilot,2,19,Yes,,2,2,$1.75,Female,English,Nope!,White,

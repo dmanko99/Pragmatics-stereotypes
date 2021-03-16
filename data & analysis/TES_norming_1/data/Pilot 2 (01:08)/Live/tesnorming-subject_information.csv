@@ -1,0 +1,4 @@
+workerid,proliferate.condition,affiliation,age,asses,comments,education,enjoyment,fairprice,gender,language,problems,race,error
+24,pilot,1,27,Yes,,3,1,Yes,Female,English,No,White,
+19,pilot,0,19,No,,2,1,$1,Female,Telugu,No,Asian,
+21,pilot,0,59,Yes,None,4,2,5$,Female,Hindi,The Continue button didn't work on the first page,Asian,

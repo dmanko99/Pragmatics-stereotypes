@@ -1,0 +1,9 @@
+workerid,proliferate.condition,affiliation,age,asses,comments,education,enjoyment,fairprice,gender,language,problems,race,error
+4,pilot,1,21,Yes,,2,2,1.00,Male,English,No!,White,
+9,pilot,3,74,Yes,"As a fiction writer, this was very easy for me, like second nature.",3,2,$2.00,Male,English,No,White,
+3,pilot,-1,,,,-1,-1,,,,,,
+7,pilot,1,55,Yes,,3,1,,Female,English,No,White,
+11,pilot,-1,,,,-1,-1,,,,,,
+6,pilot,0,24,Yes,,1,2,1.00,Female,English,No,White,
+5,pilot,1,29,No,I was interested in the names and scenarios that were chosen.,4,2,,Male,English,No,White,
+8,pilot,0,27,Yes,,2,1,The amount promised,Female,English ,No,White,
