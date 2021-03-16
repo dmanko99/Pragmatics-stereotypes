@@ -1,0 +1,263 @@
+---
+title: "Analyzing Reading Time study for TES experiment"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+This study is a replication of the first experiment in [Fine and Jaeger (2016)](http://psycnet.apa.org/record/2016-12339-001). The goal of the experiment is to investigate whether the processing a syntactic structure (in this case, a garden path sentence) is facilitated if the same structure was processed in preceding trials and whether the effect of these trials (primes) is cumulative. They indeed found that exposure to multiple primes has a cumulative effect on the processing of the target --- in particular, after being exposed to 25 garden path sentences, subjects exhibitied no detectable garden path effect. Their results suggest that readers update their expectations about the relative frequency of the primed sentence structure (garden path sentence), even at a short time scale (within an experiment).
+
+[Here](https://web.stanford.edu/~jdegen/experiment_gardenpath/experiment.html)'s the experiment we're analyzing.
+
+**Participants:** Prolific people **180 subjects**
+
+
+**Materials:** 
+
+1.  Eight verbs with MV / RC ambiguity were repeated 5 times to construct 40 sentences (critical items); beside the verb, the other words in the sentence varied across the sentences
+2.    The sentences were randomly split into two list, with 20 items each (ambiguity was counterbalanced across them)
+3.    The same 80 fillers were included in both lists (these involved a variety of syntactic structures)
+4.    Items and fillers were presented in the same pseudo-random order in both lists (details in Fine and Jaeger (2016))
+
+**Procedure:**
+
+1. Subjects read sentences in a self-paced moving display (durations between space bar presses were recorded)
+2. Subjects had to answer a yes-no comprehension question after each sentence
+
+
+**Results:**
+
+Preprocessing
+
+* RTs <100ms or >2,000ms were removed
+* participants with <80% accuracy on comprehension questions were filtered out (115 subjects remained)
+* residualized word length on log RTs (see details in Fine and Jaeger (2016))
+
+Analysis
+
+* segmented sentences into five regions: _subject, relativizer_ (only in unambiguous sentences), _ambiguous region, disembiguating region, final word_
+* average residual logRTs within the disambiguating region
+* regressed mean residual log RTs onto ambiguity, item order (1-40) and their interaction, also including stimulus order as a main effect
+```{r, message=F, warning=F}
+library(tidyverse)
+library(lme4)
+library(ggplot2)
+
+colscale = scale_color_manual(values=c("#7CB637","#4381C1", "#666666")) 
+colscale_fill = scale_fill_manual(values=c("#7CB637","#4381C1", "#666666"))
+
+# this.dir <- dirname(rstudioapi::getSourceEditorContext()$path)
+# setwd(this.dir)
+# load helper scripts
+source("helpers.R")
+
+#df = read.csv("../data/RT_mainNorming/tesRT-trials.csv", header = TRUE)%>%
+#  filter(slide_type != "bot_check")
+#subinfo = read.csv("../data/RT_mainNorming/tesRT-subject_information.csv", header = TRUE)
+
+#for pilot
+df = read.csv("../data/Pilot/tesRT_pilot2-trials.csv", header = TRUE) %>%
+  filter(slide_type != "bot_check", type != "practice")
+subinfo = read.csv("../data/Pilot/tesRT_pilot2-subject_information.csv", header = TRUE)
+
+
+# HELPER SCRIPTS
+dodge = position_dodge(.9)
+theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
+ci.low <- function(x,na.rm=T) {
+  mean(x,na.rm=na.rm) - quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.025,na.rm=na.rm)}
+ci.high <- function(x,na.rm=T) {
+  quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
+
+# SANITY CHECK: SHOULD EQUAL 200
+length(unique(df$workerid))
+```
+```{r}
+#formatting response dataframe
+# DROP IRRELEVANT COLUMNS
+df <- subset(df, select = -c(audio, image, slide_number, slide_type, error, response, proliferate.condition))
+
+# RENAME COLUMNS
+df <- df %>%
+  rename(name = first)
+
+```
+
+sanity checks & summary dataframes
+```{r}
+# create trial summary df
+by_trial <- df %>%
+  group_by(workerid, trial_id, response_correct, nameCategory, bias, type) %>%
+  summarise_each(funs())
+
+# by-worker summary
+##want to see how many trials, black/white-normed names, congruence/divergence each participant saw
+by_worker_summary <- by_trial %>%
+  group_by(workerid, nameCategory, bias) %>%
+  summarise(count = n())
+```
+
+Evaluate participant performance (and exclude those answering more than 3 comprehension questions incorrectly)
+```{r}
+# evaluate participant performance
+wrong_responses <- by_trial %>%
+  filter(response_correct == 0)
+wrong_responses <- transform(wrong_responses, freq.loc = ave(seq(nrow(wrong_responses)), workerid, FUN=length))
+blacklist <- unique(wrong_responses[wrong_responses$freq.loc > 3]$workerid)
+
+#exclude blacklisted participants
+df <- df %>%
+  filter(!(workerid %in% blacklist))
+by_trial <- by_trial %>%
+  filter(!(workerid %in% blacklist))
+```
+
+```{r}
+# DETERMINE MEAN COMPLETION TIME
+completion_times <- read.csv("../data/RT_mainNorming/tesRT-time_in_minutes.csv", header = TRUE)
+completion_times <- read.csv("../data/Pilot/tesRT_pilot2-time_in_minutes.csv", header = TRUE)
+meanRT_whole <- mean(completion_times$time_in_minutes)
+
+
+# exclude trials if more than 2.5 standard devs away from mean
+RT_sd <- sd(completion_times$time_in_minutes)
+
+long_trial <- meanRT_whole + 2.5*(RT_sd)
+short_trial <- meanRT_whole - 2.5*(RT_sd)
+
+too_slow <- completion_times[completion_times$time_in_minutes > long_trial]$workerid
+too_fast <- completion_times[completion_times$time_in_minutes < short_trial]$workerid
+
+df <- df %>%
+  filter(!(workerid %in% rbind(too_slow, too_fast)))
+by_trial <- by_trial %>%
+  filter(!(workerid %in% rbind(too_slow, too_fast)))
+```
+
+
+#tbd
+Exclude trials with response times smaller than 100ms and greater than 2000ms.
+```{r, message=F, warning=F}
+# process data
+filtered_data = filtered_data %>% 
+  filter(rt > 100) %>% filter(rt < 2000)
+filtered_data$logrt = log(filtered_data$rt)
+filtered_data$wordlen = nchar(as.character(filtered_data$form))
+filtered_data$logtrial = log(filtered_data$trial_no + 1)
+filtered_data = filtered_data %>% 
+  drop_na()
+```
+
+Transforming data
+```{r}
+#length correction? log transformation?
+df$logrt <- log(df$rt)
+df$wordlen <- nchar(as.character(df$form))
+df$logtrial <- log(df$trial_no + 1)
+
+#log transformation
+```
+
+
+Plot raw reading time profile overall.
+```{r}
+critical_df <- filter(df, type == "critical")
+```
+
+
+```{r}
+critical_items = df %>% 
+  filter(type != "filler") # type != 'filler' & 
+rawgrouped = critical_items %>% 
+  group_by(type,region) %>% 
+  summarize(rt = mean(rt),CILow=ci.low(rt),CIHigh=ci.high(rt)) %>% 
+  ungroup() %>% 
+  mutate(YMin=rt-CILow,YMax=rt+CIHigh) #%>% 
+  #mutate(region = fct_relevel(as.factor(region),"subject","relativizer","ambiguous","disambig#uating"))
+# rawgrouped_subj = critical_items %>% 
+#   group_by(subjectid, item_id, trial_no, type) %>% 
+#   summarize(rt = mean(rt))
+# subject_trial_no = rawgrouped %>% group_by(subjectid) %>% summarise(item_count = n()) %>% filter(item_count == 40)
+# grouped = grouped %>% filter(subjectid %in% subject_trial_no$subjectid) %>% arrange(subjectid, trial_no)
+# rawgrouped$item_order = rep(seq(1,40), length(unique(grouped$subjectid)))
+
+ggplot(rawgrouped, aes(x=region, y=rt, color=type,group=type)) + 
+  geom_point()  + 
+  geom_errorbar(aes(ymin=YMin,ymax=YMax),width=.25) +
+  geom_line() + 
+  colscale +
+  labs(x='Sentence region', y='Mean raw RT (ms)', fill='Type')
+```
+
+
+Plot raw reading times on disambiguating region over time.
+
+```{r}
+critical_items = df %>% 
+  filter(region == 'crit')
+rawgrouped = df %>% 
+  group_by(trial_no, type) %>% 
+  summarize(rt = mean(rt))
+rawgrouped_subj = critical_items %>% 
+  group_by(workerid, trial_id, trial_no, type) %>% 
+  summarize(rt = mean(rt))
+# subject_trial_no = rawgrouped %>% group_by(subjectid) %>% summarise(item_count = n()) %>% filter(item_count == 40)
+# grouped = grouped %>% filter(subjectid %in% subject_trial_no$subjectid) %>% arrange(subjectid, trial_no)
+# rawgrouped$item_order = rep(seq(1,40), length(unique(grouped$subjectid)))
+
+ggplot(rawgrouped, aes(x=trial_no, y=rt, col=type)) + 
+  geom_point(alpha=.2)  + 
+  geom_smooth() + 
+  colscale +
+  labs(x='Item order (#RCs seen)', y='Raw RTs (ms)', fill='Type')
+```
+
+The above plot shows that reading times decrease in both the ambiguous and unambiguous condition, and it looks like the garden path effect disappears by the end of the sentence. But raw reading times are misleading -- they include length information and general task-specific facilitation! Instead, we want to control for these factors.
+
+Regress word length and overall trial number onto log RT (ie, subtract out the variance contributed by these factors.)
+```{r,message=F,warning=F}
+#model1 = lmer(logrt ~ wordlen * logtrial + (wordlen | subjectid), filtered_data,REML=F)  # estimates the random effects of per participant reading time differences
+model1 = lmer(logrt ~ wordlen * logtrial + (wordlen | workerid), filtered_data,REML=F)  #
+res = resid(model1)
+```
+
+The summary of the regression below shows that word length positively correlates with reading time and that the trial number negatively correlates with it.
+```{r}
+summary(model1)
+```
+
+Now run the model of interest on the residualized reading times:
+```{r, message=F, warning=F}
+df$wordlength_residuals = res #need to fix this
+critical_items = df %>% filter(type != 'filler')
+critical_items = critical_items %>% filter(region == 'crit')
+grouped = critical_items %>% 
+  group_by(workerid, trial_id, trial_no, type) #%>% 
+  #summarize(res_rt = mean(wordlength_residuals)) #need to fix wordlength_residuals
+subject_trial_no = grouped %>% 
+  group_by(workerid) %>% 
+  summarise(item_count = n()) %>% 
+  filter(item_count == 40)
+grouped = grouped %>% filter(workerid %in% subject_trial_no$workerid) %>% arrange(workerid, trial_no)
+grouped$item_order = rep(seq(1,40), length(unique(grouped$workerid)))
+
+model3 = lm(res_rt ~ type * item_order + log(trial_no), grouped)
+```
+In this summary, we can see that unambiguous sentences are processed faster (the mean residual log RT is -9 on average), and so are sentences that with a higher item order. We also observe a significant two-way interaction between ambiguity and item order.
+```{r}
+summary(model3)
+```
+
+
+```{r, message=F, warning=F}
+grouped = critical_items %>% 
+  group_by(trial_no, type) %>% 
+  summarize(rt = mean(wordlength_residuals))
+ggplot(grouped, aes(x=trial_no, y=rt, col=type)) + 
+  geom_point() +
+  geom_smooth(method="lm") + 
+  colscale +
+  labs(x='Item order (#RCs seen)', y='Length- and order-corrected log RTs (ms)', fill='Type')
+```

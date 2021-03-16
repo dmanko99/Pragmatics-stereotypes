@@ -11,6 +11,7 @@ make_wordsSubArray <- function(crit_sentence, crit_word) {
   wordsList <- str_split(crit_sentence, " ")
   outputDF <- setNames(data.frame(wordsList), c("form")) %>%
     mutate(region = case_when(form == "FIRST" ~ "name",
+                              as.character(form) == as.character(crit_word) ~ "crit",
                               TRUE ~ "filler")) %>%
     mutate(lbr_before = case_when(as.character(form) == as.character(crit_word) ~ "true", 
                                   TRUE ~ "false")) %>%
