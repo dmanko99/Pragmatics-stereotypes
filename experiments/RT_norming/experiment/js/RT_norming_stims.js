@@ -49,14 +49,18 @@ var race_conditions = ["white", "white", "white", "white", "white",
                         "black", "black", "black", "black", "black"]
 
 //list of possible stories
-var critical_ids = ["performing", "genre", "lesson", "park", "lazy day",
-                "fancy restaurant", "test", "food"]
+// var critical_ids = ["performing", "genre", "lesson", "park", "lazy day",
+//                 "fancy restaurant", "test", "food"]
 
 var filler_ids = ["gray car", "blue car", "sister", "friend",
                 "neighbors", "driving", "dentist", "poker",
                 "debate", "job"]
 
-var stim_ids = critical_ids.concat(filler_ids)
+var crime_ids = ["jail", "stealing", "violence", "mugging", 
+                "drive by", "respect", "police", "aggression"]
+
+//var stim_ids = critical_ids.concat(filler_ids)
+var stim_crime_ids = crime_ids.concat(filler_ids)
 
 
 // HARD-CODED CRITICAL & FILLER STIMS WITHOUT CONSISTENCY ENCODED

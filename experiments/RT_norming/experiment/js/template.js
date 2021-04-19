@@ -1,7 +1,8 @@
 //setting up some things
 var condition = _.sample(["list1", "list2", "list1_r", "list2_r"]);
 
-var id_list = _.shuffle(stim_ids);
+//var id_list = _.shuffle(stim_ids);
+var id_list = _.shuffle(stim_crime_ids);
 var consistencies = _.shuffle(bias_conditions);
 var race_consistencies = _.shuffle(race_conditions);
 var fillers = _.shuffle(fillers);
@@ -354,6 +355,18 @@ function make_slides(f) {
     }
   });
 
+  slides.debrief = slide({
+    name : "debrief",
+    start : function() {
+      document.onkeydown = checkKey;
+      function checkKey(e) {
+        e = e || window.event;
+        if (e.keyCode == 32) 
+          exp.go();
+      }
+    }
+  });
+
   slides.thanks = slide({
     name : "thanks",
     start : function() {
@@ -387,7 +400,8 @@ function init() {
     
     for (var j=0; j<exp.nTrials; j++) {
       chosen_id = id_list.pop();
-      if (critical_ids.includes(chosen_id)) {
+      // if (critical_ids.includes(chosen_id)) {
+      if (crime_ids.includes(chosen_id)) {
         chosen_consistency = consistencies.pop();
         if (chosen_consistency == "white_consistent") {
           for (var s=0; s<white_consistent.length; s++) {
@@ -482,6 +496,7 @@ function init() {
   "transition",
   "trial",
   "subj_info",
+  "debrief",
   "thanks"];
 
   exp.data_trials = [];
