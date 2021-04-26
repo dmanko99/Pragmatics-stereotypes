@@ -57,7 +57,7 @@ var filler_ids = ["gray car", "blue car", "sister", "friend",
                 "debate", "job"]
 
 var crime_ids = ["jail", "stealing", "violence", "mugging", 
-                "drive by", "respect", "police", "aggression"]
+                "shooting", "gang/police", "gang", "aggression"]
 
 //var stim_ids = critical_ids.concat(filler_ids)
 var stim_crime_ids = crime_ids.concat(filler_ids)
