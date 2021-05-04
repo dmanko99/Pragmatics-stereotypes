@@ -48,6 +48,39 @@ var bias_conditions = ["white_consistent", "white_inconsistent",
 var race_conditions = ["white", "white", "white", "white", "white",
                         "black", "black", "black", "black", "black"]
 
+
+//list of image sources
+var practice_faces = ["face_stims/practice/pface1.png",
+                      "face_stims/practice/pface2.png",
+                      "face_stims/practice/pface3.png",
+                      "face_stims/practice/pface4.png"]
+
+var b_faces = ["face_stims/bfaces/bFace1.png",
+              "face_stims/bfaces/bFace2.png",
+              "face_stims/bfaces/bFace3.png",
+              "face_stims/bfaces/bFace4.png",
+              "face_stims/bfaces/bFace5.png",
+              "face_stims/bfaces/bFace6.png",
+              "face_stims/bfaces/bFace7.png",
+              "face_stims/bfaces/bFace8.png",
+              "face_stims/bfaces/bFace9.png",
+              "face_stims/bfaces/bFace10.png",
+              "face_stims/bfaces/bFace11.png",
+              "face_stims/bfaces/bFace12.png"]
+
+var w_faces = ["face_stims/wfaces/wFace1.png",
+              "face_stims/wfaces/wFace2.png",
+              "face_stims/wfaces/wFace3.png",
+              "face_stims/wfaces/wFace4.png",
+              "face_stims/wfaces/wFace5.png",
+              "face_stims/wfaces/wFace6.png",
+              "face_stims/wfaces/wFace7.png",
+              "face_stims/wfaces/wFace8.png",
+              "face_stims/wfaces/wFace9.png",
+              "face_stims/wfaces/wFace10.png",
+              "face_stims/wfaces/wFace11.png",
+              "face_stims/wfaces/wFace12.png"]
+
 //list of possible stories
 // var critical_ids = ["performing", "genre", "lesson", "park", "lazy day",
 //                 "fancy restaurant", "test", "food"]
