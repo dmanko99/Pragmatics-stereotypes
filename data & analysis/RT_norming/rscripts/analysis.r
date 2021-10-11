@@ -17,7 +17,7 @@ ci.high <- function(x,na.rm=T) {
   quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
 
 # Import dataframe
-#df <- read_csv("../data/RT_mainNorming/tesRT-trials.csv", header = TRUE) %>%
+#df <- read_csv("../data/RT_mainNorming/tesRT-trials.csv") %>%
 df <- read_csv("../data/crimeRTnorming/tes_crimeRT-trials.csv") %>%
   # remove bot check slides
   filter(!(type == "bot_check")) %>%
@@ -83,6 +83,22 @@ df <- df %>%
                             region_old == "spillover_4" ~ "spillover_4",
                             region_old == "name" ~ "name",
                             region_old == "filler" ~ "filler",
+                            TRUE ~ "other")) %>%
+  select(-region_old)
+
+#for non-criminality ones
+df <- df %>%
+  mutate(region_old = region) %>%
+  mutate(region = case_when(lead(region_old) == "crit" ~ "precritical_1",
+                            lag(region_old) == "crit" ~ "spillover_1",
+                            region_old == "crit" ~ "crit",
+                            TRUE ~ "other")) %>%
+  mutate(region_old = region) %>%
+  mutate(region = case_when(region_old == "precritical_1" ~ "precritical_1",
+                            region_old == "spillover_1" ~ "spillover_1",
+                            region_old == "crit" ~ "crit",
+                            lead(region_old) == "precritical_1" ~ "precritical_2",
+                            lag(region_old) == "spillover_1" ~ "spillover_2",
                             TRUE ~ "other")) %>%
   select(-region_old)
 
@@ -199,15 +215,33 @@ criminalityModel_crit <- lmer(residuals ~ logtrial * ctr_nameCategory * ctr_crim
                               criticaldf, REML = F)
 summary(criminalityModel_crit)
 
+criminalityModel_crit2 <- lmer(residuals ~ logtrial * ctr_nameCategory * ctr_crim + 
+                                (1 + ctr_nameCategory | trial_id) + 
+                                (1 + (ctr_nameCategory * ctr_crim) | workerid), 
+                              criticaldf, REML = F)
+summary(criminalityModel_crit2)
+
+
 criminalityModel_spill <- lmer(residuals ~ logtrial * ctr_nameCategory * ctr_crim + 
                                 (1 | trial_id) + 
                                 (1 | workerid), 
                               spilloverdf, REML = F)
 summary(criminalityModel_spill)
+
+criminalityModel_spill2 <- lmer(residuals ~ logtrial * ctr_nameCategory * ctr_crim + 
+                                  (1 + ctr_nameCategory | trial_id) + 
+                                  (1 + (ctr_nameCategory * ctr_crim) | workerid), 
+                               spilloverdf, REML = F)
+summary(criminalityModel_spill2)
 ## Looking at all regions of interest (namely pre-crit, crit, and spillover)
 subregion_df <- filter(df, region %in% c("pre_crit_2", "pre_crit_1",
                                          "crit", "spillover_1", "spillover_2",
                                          "spillover_3", "spillover_4"),
+                       type == "critical")
+#ugh just for non-crim
+subregion_df <- filter(df, region %in% c("precritical_2", "precritical_1",
+                                         "crit", "spillover_1", "spillover_2"),
+                       #"spillover_3", "spillover_4"),
                        type == "critical")
 
 subregion_df$bias <- factor(subregion_df$bias)
@@ -290,6 +324,10 @@ residuals_grouped2_byname$region <- factor(residuals_grouped2_byname$region,
                                                     "spillover_2",
                                                     "spillover_3",
                                                     "spillover_4"))
+residuals_grouped2_byname$nameCategory <- recode(residuals_grouped2_byname$nameCategory, 
+                                                 "black" = "Black-normed Names",
+                                                 "white" = "White-normed Names")
+
 
 residuals_wbias_byname = subregion_df %>%
   group_by(region, bias, nameCategory) %>% 
@@ -298,6 +336,14 @@ residuals_wbias_byname = subregion_df %>%
   mutate(YMin=mean_resid-CILow,YMax=mean_resid+CIHigh)
 
 residuals_wbias_byname$region <- factor(residuals_wbias_byname$region)
+#for non-crim
+residuals_wbias_byname$region <- factor(residuals_wbias_byname$region, 
+                                        levels=c("precritical_2",
+                                                 "precritical_1",
+                                                 "crit",
+                                                 "spillover_1",
+                                                 "spillover_2"))
+#for crim
 residuals_wbias_byname$region <- factor(residuals_wbias_byname$region, 
                                  levels=c("pre_crit_2",
                                           "pre_crit_1",
@@ -306,8 +352,8 @@ residuals_wbias_byname$region <- factor(residuals_wbias_byname$region,
                                           "spillover_2",
                                           "spillover_3",
                                           "spillover_4"))
-residuals_wbias_byname$bias <- recode(residuals_wbias_byname$bias, "black" = "black-typical",
-                                                                "white" = "white-typical")
+residuals_wbias_byname$bias <- recode(residuals_wbias_byname$bias, "black" = "Evoking Criminality",
+                                                                "white" = "Not Evoking Criminality")
 
 residuals_wbias_bytrial = subregion_df %>%
   group_by(region, bias, nameCategory, trial_id) %>% 
@@ -321,9 +367,9 @@ residuals_wbias_bytrial$region <- factor(residuals_wbias_bytrial$region,
                                           "pre_crit_1",
                                           "crit",
                                           "spillover_1",
-                                          "spillover_2",
-                                          "spillover_3",
-                                          "spillover_4"))
+                                          "spillover_2"))
+                                          #"spillover_3",
+                                          #"spillover_4"))
 residuals_wbias_bytrial$bias <- recode(residuals_wbias_bytrial$bias, "black" = "black-typical",
                                                         "white" = "white-typical")
 
@@ -343,8 +389,12 @@ ggplot(residuals_grouped2_byname, aes(x=region, y=mean_resid, color=consistency,
   geom_point()  + 
   geom_errorbar(aes(ymin=YMin,ymax=YMax),width=.25) +
   geom_line() +
-  labs(x='Sentence region', y='Residualized/Centered RT (ms)', fill='Type') +
-  theme(axis.text.x = element_text(angle = 30))
+  scale_colour_manual("Stereotype\nConsistency", values = c("#00397A","#CCCCCC")) +
+  labs(x = "Sentence Region", y = "Residualized/Centered RT (ms)", fill = "Type")  +
+  ggtitle("Mean Reading Times for Black- and White-typical Completions") +
+  theme(title = element_text(size=18), legend.text = element_text(size=15),
+        axis.text = element_text(angle = 30, size = 12),
+        strip.text = element_text(size=12))
 
 #and also by item
 ggplot(residuals_grouped2_bytrial, aes(x=region, y=mean_resid, color=consistency, group=consistency)) + 
@@ -362,8 +412,13 @@ ggplot(residuals_wbias_byname, aes(x=region, y=mean_resid, color=nameCategory, g
   geom_point()  + 
   geom_errorbar(aes(ymin=YMin,ymax=YMax),width=.25) +
   geom_line() +
-  labs(x='Sentence region', y='Residualized/Centered RT (ms)', fill='Type') +
-  theme(axis.text.x = element_text(angle = 30))
+  scale_colour_manual("Name Bias", values = c("#00397A","#CCCCCC")) +
+  labs(x = "Sentence Region", y = "Residualized/Centered RT (ms)", fill = "Type")  +
+  #scale_x_discrete(labels = c("White", "Black")) +
+  ggtitle("Mean Reading Times for Black- and White-typical Completions") +
+  theme(title = element_text(size=18), legend.text = element_text(size=15),
+        axis.text = element_text(angle = 30, size = 12),
+        strip.text = element_text(size=12))
 ## and now by trial id
 ggplot(filter(residuals_wbias_bytrial, bias == "black-typical"), 
        aes(x=region, y=mean_resid, color=nameCategory, group=nameCategory)) + 
@@ -625,7 +680,7 @@ demographics_df <- demographics_df %>%
 
 residuals_age = demographics_df %>%
   group_by(region, bias, nameCategory, ageGroup) %>% 
-  summarize(mean_resid = mean(residuals), CILow=ci.low(residuals), CIHigh=ci.high(residuals)) %>% 
+  summarise(mean_resid = mean(residuals), CILow=ci.low(residuals), CIHigh=ci.high(residuals)) %>% 
   ungroup() %>% 
   mutate(YMin=mean_resid-CILow,YMax=mean_resid+CIHigh)
 residuals_age$region <- factor(residuals_age$region)
@@ -646,7 +701,7 @@ ggplot(residuals_age, aes(x=region, y=mean_resid, color=nameCategory,
 ###raw RTs
 residuals_age_raw = demographics_df %>%
   group_by(region, bias, nameCategory, ageGroup) %>% 
-  summarize(meanRT = mean(rt), CILow=ci.low(rt), CIHigh=ci.high(rt)) %>% 
+  summarise(meanRT = mean(rt), CILow=ci.low(rt), CIHigh=ci.high(rt)) %>% 
   ungroup() %>% 
   mutate(YMin=meanRT-CILow,YMax=meanRT+CIHigh)
 residuals_age_raw$region <- factor(residuals_age_raw$region)

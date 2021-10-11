@@ -343,6 +343,7 @@ function make_slides(f) {
           "response_correct": this.response_correct ? 1 : 0,
           "bias": this.stim.bias,
           "nameCategory": this.stim.race,
+          "image": this.stim.face,
           "trial_no": trial_counter
         }); 
       }
